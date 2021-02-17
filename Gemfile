@@ -35,6 +35,7 @@ group :development, :test do
   gem 'rspec', '~> 3.4'
   gem 'rspec-rails', '~> 4.0', '>= 4.0.2'
   gem 'spring-commands-rspec'
+  gem 'rexml', '~> 3.2', '>= 3.2.4'
 end
 
 group :development do
