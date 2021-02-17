@@ -1,9 +1,14 @@
+require_relative '../services/game_service.rb'
+require_relative '../services/invalid_card_code_line_exception.rb'
+
+
 class GameController < ApplicationController
 
     def initialize
         @errorMsg = ""
         @lines = []        
         @processedLines = []
+        @gameService ||= GameService.new
         super
     end
 
@@ -26,42 +31,28 @@ class GameController < ApplicationController
                 lineNumber += 1
                 @processedLines << processLine( line )
             end
-            @problematicLine = ""
-        rescue ArgumentError => exception            
-            @messageToUser = "The file validation has been failed on reading the line #{lineNumber}. Reason: #{exception.message}"            
+        rescue InvalidCardCodeLineException => exception            
+            @messageToUser = "#{exception.message} - line number: #{lineNumber}."                                    
+            @problematicLine = exception.line            
         rescue StandardError => exception
             @messageToUser = "An Unexpected error ocurred: #{exception.message}"
+            puts exception.backtrace
+        ensure
+            puts "Problematic line: #{@problematicLine}"
         end
-
-        @porra = "Vai se lascar: #{@messageToUser}"
     end
 
     private
 
     def processLine( lineContent )
-        validateLine( lineContent )
-        allCards = lineContent.split(" ")
-        handCards = allCards[0..4]
+        allCodeCards = lineContent.split(" ")        
+        @cardsArray = @gameService.convertOnCardsArray( allCodeCards )
+        handCards = allCodeCards[0..4]
         stringHandCards = handCards.join(" ")
-        first5DeckCards = allCards[5..9]        
+        first5DeckCards = allCodeCards[5..9]        
         stringFirst5DeckCards = first5DeckCards.join(" ")
         textToUser = "Hand: #{stringHandCards} Deck: #{stringFirst5DeckCards} - Best game:"
         return textToUser
     end
 
-    def validateLine( lineContent )
-        allCodeCards = lineContent.split(" ")
-        for codeCard in allCodeCards
-            begin
-                Card.new( codeCard )
-            rescue ArgumentError => exception                
-                positionOfProblematicValueInArray = allCodeCards.find_index( codeCard )
-                newValue = "|#{codeCard}|"
-                allCodeCards[ positionOfProblematicValueInArray ] = newValue
-                @problematicLine = allCodeCards.join(" ")
-                puts "Exception Catched. Generated: #{@problematicLine}"
-                raise
-            end
-        end
-    end
 end
