@@ -1,0 +1,12 @@
+
+<br/>
+<br/>
+<p style="color: red"><%= @messageToUser %></p>
+
+<p>Content of the file</p>
+
+<% for line in @processedLines %>
+    <p><%= line %></p>
+<% end %>
+
+<p style="color: red"><%= @problematicLine %></p>
