@@ -56,9 +56,8 @@ class GameController < ApplicationController
                 Card.new( codeCard )
             rescue ArgumentError => exception                
                 positionOfProblematicValueInArray = allCodeCards.find_index( codeCard )
-                allCodeCards[ positionOfProblematicValueInArray ] = "|#{codeCard}|"
-                # allCodeCards.insert( (1+positionOfProblematicValueInArray), "|" )
-                # allCodeCards.insert( positionOfProblematicValueInArray, "|" )
+                newValue = "|#{codeCard}|"
+                allCodeCards[ positionOfProblematicValueInArray ] = newValue
                 @problematicLine = allCodeCards.join(" ")
                 puts "Exception Catched. Generated: #{@problematicLine}"
                 raise
