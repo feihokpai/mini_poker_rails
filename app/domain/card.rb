@@ -1,16 +1,18 @@
 class Card
     attr_reader :number, :suit
 
-    VALID_NUMBERS = ('1'..'9').to_a()
+    VALID_NUMERICAL_NUMBERS = ('1'..'9').to_a()
     VALID_LETTER_NUMBERS = ["A","T","J","Q","K"]
+    VALID_NUMBERS = VALID_NUMERICAL_NUMBERS + VALID_LETTER_NUMBERS
     VALID_SUITS = ["C","H","D","S"]
 
     def initialize( stringCombination )
         initialize_validations( stringCombination )
     end
 
+    # @Deprecated Use Card::VALID_NUMBERS instead
     def self.allValidNumbers
-        return VALID_NUMBERS + VALID_LETTER_NUMBERS
+        return VALID_NUMERICAL_NUMBERS + VALID_LETTER_NUMBERS
     end
 
     def ==( value)

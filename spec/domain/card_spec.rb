@@ -72,11 +72,15 @@ describe Card do
 
     it 'Should convert cards of 1c to 9c to 1C to 9C - Club' do
         itShouldPass = true
-        for number in 1..9
-            created = createSpecificCard( number, "c", itShouldPass)
-            expected = createSpecificCard( number, "C", itShouldPass)
-            expect( created ).to eq( expected )
-        end
+        validSmallSuits = ["c","d","h","s"]
+        for suit in validSmallSuits
+            for number in 1..9
+                capitalSuit = suit.upcase
+                created = createSpecificCard( number, suit, itShouldPass)
+                expected = createSpecificCard( number, capitalSuit, itShouldPass)
+                expect( created ).to eq( expected )
+            end
+        end 
     end
 
     it 'Creating cards of 1D to 9D - Diamond' do
@@ -93,14 +97,14 @@ describe Card do
         createSpecificCard( "0", "D", itShouldPass )
     end
 
-    it 'Should convert cards of 1d to 9d to 1D to 9D - Club' do
-        itShouldPass = true
-        for number in 1..9
-            created = Card.new( number, "d")
-            expected = Card.new( number, "D")
-            expect( created ).to eq( expected )
-        end
-    end
+    # it 'Should convert cards of 1d to 9d to 1D to 9D - Club' do
+    #     itShouldPass = true
+    #     for number in 1..9
+    #         created = createSpecificCard( number, "d", itShouldPass)
+    #         expected = createSpecificCard( number, "D", itShouldPass)
+    #         expect( created ).to eq( expected )
+    #     end
+    # end
 
     it 'Creating cards of 1S to 9S - Sword' do
         createCards0to9( "S" )
@@ -116,14 +120,14 @@ describe Card do
         createSpecificCard( "0", "S", itShouldPass )
     end
 
-    it 'Should convert cards of 1s to 9s to 1S to 9S - Club' do
-        itShouldPass = true
-        for number in 1..9
-            created = Card.new( number, "s")
-            expected = Card.new( number, "S")
-            expect( created ).to eq( expected )
-        end
-    end
+    # it 'Should convert cards of 1s to 9s to 1S to 9S - Club' do
+    #     itShouldPass = true
+    #     for number in 1..9
+    #         created = Card.new( number, "s")
+    #         expected = Card.new( number, "S")
+    #         expect( created ).to eq( expected )
+    #     end
+    # end
 
     it 'Creating cards of 1H to 9H - Hearts' do
         createCards0to9( "H" )
@@ -139,13 +143,13 @@ describe Card do
         createSpecificCard( "0", "H", itShouldPass )
     end
 
-    it 'Should convert cards of 1h to 9h to 1H to 9H - Club' do
-        for number in 1..9
-            created = Card.new( number, "h")
-            expected = Card.new( number, "H")
-            expect( created ).to eq( expected )
-        end
-    end
+    # it 'Should convert cards of 1h to 9h to 1H to 9H - Club' do
+    #     for number in 1..9
+    #         created = Card.new( number, "h")
+    #         expected = Card.new( number, "H")
+    #         expect( created ).to eq( expected )
+    #     end
+    # end
 
     it "Shouldn't create cards of 1h to 11 to 99" do
         itShouldPass = false                
@@ -155,25 +159,50 @@ describe Card do
         end
     end
 
-    it "Shouldn't create cards with invalid Capital letters" do
+    it "Shouldn't create cards with numbers with invalid Capital letter " do
         itShouldPass = false
         allCapitalLetters = ('A'..'Z').to_a
         validLetters = ["A","T","J","Q","K"]
         invalidCapitalletters = allCapitalLetters - validLetters
-        for suit in invalidCapitalletters
-            number = 1
-            createSpecificCard( number, suit, itShouldPass )
+        for number in invalidCapitalletters
+            for suit in Card::VALID_SUITS
+                createSpecificCard( number, suit, itShouldPass )
+            end 
         end
     end
 
-    it "Shouldn't create cards with invalid Small letters" do
+    it "Shouldn't create cards numbers with invalid Small letter " do
+        itShouldPass = false
+        allSmallLetters = ('a'..'z').to_a
+        validSmallLetters = ["a","t","j","q","k"]
+        invalidSmallletters = allSmallLetters - validSmallLetters
+        for number in invalidSmallletters
+            for suit in Card::VALID_SUITS
+                createSpecificCard( number, suit, itShouldPass )
+            end 
+        end
+    end
+
+    it "Shouldn't create cards with suit with invalid Capital letter " do
+        itShouldPass = false
+        allCapitalLetters = ('A'..'Z').to_a
+        invalidCapitalletters = allCapitalLetters - Card::VALID_SUITS
+        for suit in invalidCapitalletters
+            for number in Card::VALID_NUMBERS
+                createSpecificCard( number, suit, itShouldPass )
+            end 
+        end
+    end
+
+    it "Shouldn't create cards with suit with invalid Small letter " do
         itShouldPass = false
         allCapitalLetters = ('a'..'z').to_a
-        validLetters = ["a","t","j","q","k"]
-        invalidCapitalletters = allCapitalLetters - validLetters
+        smallValidSuits = Card::VALID_SUITS.map { |value| value.downcase }
+        invalidCapitalletters = allCapitalLetters - smallValidSuits
         for suit in invalidCapitalletters
-            number = 1
-            createSpecificCard( number, suit, itShouldPass )
+            for number in Card::VALID_NUMBERS
+                createSpecificCard( number, suit, itShouldPass )
+            end 
         end
     end
 
@@ -189,7 +218,7 @@ describe Card do
     it 'Should convert cards of aH,jH to AH,Jh' do
         itShouldPass = true
         lettersNumbers = ["a","t","j","q","k"]
-        suits = ["C","J","Q","K"]
+        suits = Card::VALID_SUITS
         for number in lettersNumbers
             for suit in suits
                 capitalSuit = suit.upcase
