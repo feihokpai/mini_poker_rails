@@ -17,6 +17,10 @@ class Card
         return true
     end
 
+    def self.isArrayOfCards( object )
+        return ArrayUtil.isAnArrayWithOnly?( Card )
+    end
+
     private 
 
     def argumentErrorMessageBase        
