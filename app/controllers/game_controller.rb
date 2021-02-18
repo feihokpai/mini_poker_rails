@@ -46,6 +46,7 @@ class GameController < ApplicationController
 
     def processLine( lineContent )
         allCodeCards = lineContent.split(" ")        
+        @gameService.validateLineOfCardCodes( allCodeCards )   
         @cardsArray = @gameService.convertOnCardsArray( allCodeCards )
         handCards = allCodeCards[0..4]
         stringHandCards = handCards.join(" ")

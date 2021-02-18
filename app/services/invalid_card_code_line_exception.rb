@@ -1,12 +1,13 @@
 class InvalidCardCodeLineException < StandardError
-    attr_reader :line
+    attr_reader :line, :specificMessage
 
-    def initialize( problematicLine )
+    def initialize( problematicLine, message = "" )
         @line = problematicLine
-        super
+        @specificMessage = message
+        super()
     end
 
     def message
-        return "Validation of a line with card codes has been failed"
+        return "Validation of a line with card codes has been failed: #{specificMessage}"
     end
 end
