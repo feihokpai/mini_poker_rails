@@ -36,7 +36,8 @@ class GameController < ApplicationController
             @problematicLine = exception.line            
         rescue StandardError => exception
             @messageToUser = "An Unexpected error ocurred: #{exception.message}"
-            puts exception.backtrace
+            tenLinesOfBackTrace = exception.backtrace[0..10]
+            puts tenLinesOfBackTrace
         ensure
             puts "Problematic line: #{@problematicLine}"
         end
