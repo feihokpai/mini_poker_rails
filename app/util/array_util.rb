@@ -4,10 +4,27 @@ class ArrayUtil
         return duplicates
     end
 
-    def self.allValuesInNumericalSequence?( array )
-        isNotAnArray = not( array.is_a?( Array ) )
-        raise ArgumentError.new( "It was expected an Array, but received a #{array.class}" ) if isNotAnArray
+    def self.changeValue( array, before, after )
+        newArray = array.map {|item| (item==before ? after : item) }
+        return newArray
+    end
+
+    def self.convertToArrayOfIntegers( array )
+        newArray = []
+        for item in array
+            begin
+                newArray << item.to_i()
+            rescue
+                raise ArgumentError.new( "Failed to convert this value in Integer: #{item}" )
+            end
+        end
+        return newArray
+    end
+
+    def self.isAnArrayWithAllValuesAsIntegersInSequence?( array )
+        return false if not isAnArrayWithOnly?( array, Integer )
         return false if array.size < 2
+
         orderedArray = array.sort
         penultimateIndex = orderedArray.size-2
         for index in 0..penultimateIndex
