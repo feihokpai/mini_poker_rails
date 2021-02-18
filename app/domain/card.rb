@@ -5,6 +5,12 @@ class Card
     VALID_LETTER_NUMBERS = ["A","T","J","Q","K"]
     VALID_NUMBERS = VALID_NUMERICAL_NUMBERS + VALID_LETTER_NUMBERS
     VALID_SUITS = ["C","H","D","S"]
+    
+    ACE_VALUE=1
+    TEN_VALUE=10
+    JACK_VALUE=11
+    QUEEN_VALUE=12
+    KING_VALUE=13
 
     def initialize( stringCombination )
         initialize_validations( stringCombination )
@@ -18,7 +24,17 @@ class Card
     end
 
     def self.isArrayOfCards( object )
-        return ArrayUtil.isAnArrayWithOnly?( Card )
+        return ArrayUtil.isAnArrayWithOnly?( object, Card )
+    end
+
+    def numberAsInteger
+        isNumericalValueInteger = StringUtil.isInteger?( @number )
+        return number.to_i() if isNumericalValueInteger
+        return ACE_VALUE if @number == "A"
+        return TEN_VALUE if @number == "T"
+        return JACK_VALUE if @number == "J"
+        return QUEEN_VALUE if @number == "Q"
+        return KING_VALUE if @number == "K"
     end
 
     private 
