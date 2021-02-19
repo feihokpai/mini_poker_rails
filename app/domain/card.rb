@@ -3,6 +3,7 @@ class Card
 
     VALID_NUMERICAL_NUMBERS = ('1'..'9').to_a()
     VALID_LETTER_NUMBERS = ["A","T","J","Q","K"]
+    VALID_LETTER_NUMBERS_FROM_10 = ["T","J","Q","K"]
     VALID_NUMBERS = VALID_NUMERICAL_NUMBERS + VALID_LETTER_NUMBERS
     VALID_SUITS = ["C","H","D","S"]
     
@@ -11,6 +12,8 @@ class Card
     JACK_VALUE=11
     QUEEN_VALUE=12
     KING_VALUE=13
+    TEN_TO_KING_VALUES = [10,11,12,13]
+    AFTER_KING_VALUES = [14,15,16,17]
 
     ACE_PLUS_KING_VALUE=14
     TWO_PLUS_KING_VALUE=15
@@ -19,6 +22,18 @@ class Card
 
     def initialize( stringCombination )
         initialize_validations( stringCombination )
+    end
+
+    def self.create( number, suit)
+        newNumber = number
+        if (number == ACE_VALUE or number == ACE_PLUS_KING_VALUE)
+            newNumber = "A"   
+        elsif TEN_TO_KING_VALUES.include?(number )
+            newNumber = numberAsLetter( number )
+        elsif AFTER_KING_VALUES.include?(number )
+            newNumber = number - Card::KING_VALUE        
+        end        
+        return Card.new( "#{newNumber}#{suit}" )
     end
 
     def ==( value)
@@ -40,6 +55,15 @@ class Card
         return JACK_VALUE if @number == "J"
         return QUEEN_VALUE if @number == "Q"
         return KING_VALUE if @number == "K"
+    end
+
+    def self.numberAsLetter( number )
+        return "A" if (number == ACE_VALUE or number == ACE_PLUS_KING_VALUE)
+        return "T" if number == TEN_VALUE
+        return "J" if number == JACK_VALUE
+        return "Q" if number == QUEEN_VALUE
+        return "K" if number == KING_VALUE
+        return nil
     end
 
     def stringDefinition

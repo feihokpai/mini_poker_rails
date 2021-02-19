@@ -27,6 +27,12 @@ class GameService < GenericService
         end
     end
 
+    def convertCardCodesStringOnCardsArray( cardCodesString )   
+        validate_convertCardCodesStringOnCardsArray( cardCodesString )           
+        allCodeCards = cardCodesString.split(" ") 
+        return convertOnCardsArray( allCodeCards )
+    end
+
     def convertOnCardsArray( cardCodesArray )        
         cardsArray = []
         for codeCard in cardCodesArray
@@ -47,6 +53,10 @@ class GameService < GenericService
         positionOfItem = array.find_index( value )
         newValue = "|#{value}|"
         array[ positionOfItem ] = newValue
+    end
+
+    def validate_convertCardCodesStringOnCardsArray( cardCodesString )  
+        ValidateUtil.raiseIfValueIsNotA( cardCodesString, String )
     end
 
     def validate_analyzeBestMove( arrayOfCards )

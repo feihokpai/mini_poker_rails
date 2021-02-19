@@ -97,15 +97,6 @@ describe Card do
         createSpecificCard( "0", "D", itShouldPass )
     end
 
-    # it 'Should convert cards of 1d to 9d to 1D to 9D - Club' do
-    #     itShouldPass = true
-    #     for number in 1..9
-    #         created = createSpecificCard( number, "d", itShouldPass)
-    #         expected = createSpecificCard( number, "D", itShouldPass)
-    #         expect( created ).to eq( expected )
-    #     end
-    # end
-
     it 'Creating cards of 1S to 9S - Sword' do
         createCards0to9( "S" )
     end
@@ -120,15 +111,6 @@ describe Card do
         createSpecificCard( "0", "S", itShouldPass )
     end
 
-    # it 'Should convert cards of 1s to 9s to 1S to 9S - Club' do
-    #     itShouldPass = true
-    #     for number in 1..9
-    #         created = Card.new( number, "s")
-    #         expected = Card.new( number, "S")
-    #         expect( created ).to eq( expected )
-    #     end
-    # end
-
     it 'Creating cards of 1H to 9H - Hearts' do
         createCards0to9( "H" )
     end
@@ -142,14 +124,6 @@ describe Card do
         createSpecificCard( "10", "H", itShouldPass )
         createSpecificCard( "0", "H", itShouldPass )
     end
-
-    # it 'Should convert cards of 1h to 9h to 1H to 9H - Club' do
-    #     for number in 1..9
-    #         created = Card.new( number, "h")
-    #         expected = Card.new( number, "H")
-    #         expect( created ).to eq( expected )
-    #     end
-    # end
 
     it "Shouldn't create cards of 1h to 11 to 99" do
         itShouldPass = false                

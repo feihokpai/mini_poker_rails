@@ -40,6 +40,10 @@ class CardCombination
         bestMoves[4] = self.bestMoveTradingNCards( handCards, deckCards, 4 )
         bestMoves[5] = self.bestMoveTradingNCards( handCards, deckCards, 5 )
         orderedMoves = bestMoves.sort_by { |move| move.pontuation }
+        #############################################################
+        # puts "orderedMoves:"
+        # puts orderedMoves
+        #############################################################
         return orderedMoves.last
     end
 
@@ -52,10 +56,20 @@ class CardCombination
         cardIndexes = [0,1,2,3,4]
         possibleCombinationsArray = cardIndexes.combination( numberOfCards ).to_a()
 
+        ######################################################
+        # puts "Searching with trade of #{numberOfCards} cards"
+        # puts "Best Move no trading: #{bestMove.name}"
+        ######################################################
         for combinationArray in possibleCombinationsArray
             copyOfHandCards = handCards.clone()
             nextDeckCardsIndex = 0
             for index in combinationArray
+                ###############################################################
+                # puts "array: #{combinationArray}"
+                # if combinationArray == [2]
+                #     puts "copyOfHandCards[#{index}] = #{deckCards[ nextDeckCardsIndex ]} "
+                # end
+                ###############################################################
                 copyOfHandCards[index] = deckCards[ nextDeckCardsIndex ]                
                 nextDeckCardsIndex += 1
             end
@@ -63,6 +77,12 @@ class CardCombination
             if newMove.pontuation > bestMove.pontuation
                 bestMove = newMove
             end
+            ###############################################################
+            # if combinationArray == [2]
+            #     puts "copyOfHandCards: = #{copyOfHandCards} - move: #{newMove.name}"
+            #     puts "Best Move now: #{bestMove.name}"
+            # end
+            ###############################################################
         end
         return bestMove
     end
@@ -79,19 +99,29 @@ class CardCombination
     end
 
     def self.moveWithZeroNumericalCombinations( arrayOfCards )
-        suitCombinations = self.getSuitDuplicatesInHand( arrayOfCards )
-        isANumericalSequence = self.cardsInNumericalSequence?( arrayOfCards )
-        if suitCombinations.size != 5
-            return STRAIGHT if isANumericalSequence
-            return HIGHEST_CARD
+        suitCombinations = self.getSuitDuplicatesInHand( arrayOfCards )        
+        uniqueSuitValues = suitCombinations.uniq()
+        #######################################################################
+        # puts "suitCombinations.size: #{suitCombinations.size}"
+        # puts "uniqueSuitValues.size: #{uniqueSuitValues.size}"
+        #######################################################################
+        allSuitsEquals = suitCombinations == 5 && uniqueSuitValues.size == 1
+        if allSuitsEquals
+            return self.moveWithFiveSuitCombination( arrayOfCards )
         end
-        return self.moveWithFiveSuitCombination( arrayOfCards )
+        isANumericalSequence = self.cardsInNumericalSequence?( arrayOfCards )
+        return STRAIGHT if isANumericalSequence
+        return HIGHEST_CARD
     end
 
     def self.moveWithFiveSuitCombination( arrayOfCards )
         isANumericalSequence = self.cardsInNumericalSequence?( arrayOfCards )
         return FLUSH if not isANumericalSequence
         orderedNumbers = self.numbersOrderedAsIntegersConsideringTheKing( arrayOfCards )
+        #######################################################################
+        # puts "orderedNumbers.first: #{orderedNumbers.first}"
+        # puts "orderedNumbers.last: #{orderedNumbers.last}"
+        #######################################################################
         isFirstCardNumber10 = orderedNumbers.first == Card::TEN_VALUE
         isLastCardNumber1 = orderedNumbers.last == Card::ACE_PLUS_KING_VALUE
         if (isFirstCardNumber10 && isLastCardNumber1)
@@ -113,6 +143,10 @@ class CardCombination
     def self.numbersOrderedAsIntegersConsideringTheKing( arrayOfCards )
         orderedNumbers = self.numbersOrderedAsIntegers( arrayOfCards )
         includesKing = orderedNumbers.include?( Card::KING_VALUE )       
+        #################################################################
+        # puts "Initial Ordering - includes king: #{includesKing}"
+        # puts orderedNumbers
+        #################################################################
         if not(includesKing)
             return orderedNumbers
         end
@@ -121,6 +155,10 @@ class CardCombination
             newValue = Card::KING_VALUE + number
             copyOfOrderedNumbers = ArrayUtil.changeValue( copyOfOrderedNumbers, number, newValue )
         end
+        #################################################################
+        # puts "copyOfOrderedNumbers after change values:"
+        # puts copyOfOrderedNumbers
+        #################################################################
         reorderedNumbers = copyOfOrderedNumbers.sort
         return reorderedNumbers
     end
