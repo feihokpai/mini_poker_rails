@@ -40,7 +40,8 @@ end
 
 def createArrayOfCardsAllNumericalSequencesAllSuit( )
     cards = []
-    for number in 1..13                
+    maximumValue = 14
+    for number in 1..(maximumValue-4)                
         rangeArray = (number..(number+4)).to_a()
         array = createArrayOfCardsFromNumbersAllSuit( rangeArray )
         cards = cards + array
@@ -108,6 +109,10 @@ describe CardCombination do
         arrayOfHands += createArrayOfCardsFromNumbersAllSuit( [11,12,13,14,3] )
         for hand in arrayOfHands
             bestMove = CardCombination.move( hand )
+            #################################################
+            # puts "hand: #{hand}"
+            # puts "result: #{bestMove} - expected: #{CardCombination::HIGHEST_CARD}"
+            #################################################
             verify( bestMove, CardCombination::FLUSH, hand )
         end
     end
