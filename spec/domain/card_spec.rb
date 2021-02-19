@@ -38,9 +38,10 @@ def createSpecificCard( number, suit, itShouldPass )
 
 end
 
-def createCards0to9( suit )
+def createCards1to9( suit )
     itShouldPass = true
-    for number in 1..9
+    createSpecificCard( "A", suit, itShouldPass )
+    for number in 2..9
         createSpecificCard( number, suit, itShouldPass )
     end
 end
@@ -57,7 +58,7 @@ describe Card do
     
 
     it 'Creating cards of 1C to 9C - Club' do
-        createCards0to9( "C" )
+        createCards1to9( "C" )
     end
 
     it 'Creating letter cards of C - Club' do
@@ -70,11 +71,11 @@ describe Card do
         createSpecificCard( "0", "C", itShouldPass )
     end
 
-    it 'Should convert cards of 1c to 9c to 1C to 9C - Club' do
+    it 'Should convert cards of 2c to 9c to 2C to 9C - Club' do
         itShouldPass = true
         validSmallSuits = ["c","d","h","s"]
-        for suit in validSmallSuits
-            for number in 1..9
+        for suit in validSmallSuits            
+            for number in 2..9
                 capitalSuit = suit.upcase
                 created = createSpecificCard( number, suit, itShouldPass)
                 expected = createSpecificCard( number, capitalSuit, itShouldPass)
@@ -84,7 +85,7 @@ describe Card do
     end
 
     it 'Creating cards of 1D to 9D - Diamond' do
-        createCards0to9( "D" )
+        createCards1to9( "D" )
     end
 
     it 'Creating letter cards of D - Diamond' do
@@ -98,7 +99,7 @@ describe Card do
     end
 
     it 'Creating cards of 1S to 9S - Sword' do
-        createCards0to9( "S" )
+        createCards1to9( "S" )
     end
 
     it 'Creating letter cards of S - Sword' do
@@ -112,7 +113,7 @@ describe Card do
     end
 
     it 'Creating cards of 1H to 9H - Hearts' do
-        createCards0to9( "H" )
+        createCards1to9( "H" )
     end
 
     it 'Creating letter cards of H - Hearts' do
