@@ -56,7 +56,6 @@ class CardCombination
             copyOfHandCards = handCards.clone()
             nextDeckCardsIndex = 0
             for index in combinationArray
-                puts "array: #{combinationArray}"
                 copyOfHandCards[index] = deckCards[ nextDeckCardsIndex ]                
                 nextDeckCardsIndex += 1
             end
