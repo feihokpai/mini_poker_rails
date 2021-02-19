@@ -64,4 +64,19 @@ describe CardCombination do
             verify( bestMove, CardCombination::STRAIGHT_FLUSH, hand )
         end
     end
+
+    it 'move() - Flush' do
+        arrayOfHands = []
+        arrayOfHands += createArrayOfCardsFromNumbersAllSuit( [1,2,3,4,6] )
+        arrayOfHands += createArrayOfCardsFromNumbersAllSuit( [1,2,3,4,7] )
+        arrayOfHands += createArrayOfCardsFromNumbersAllSuit( [1,2,3,4,8] )
+        arrayOfHands += createArrayOfCardsFromNumbersAllSuit( [1,3,4,8,10] )
+        arrayOfHands += createArrayOfCardsFromNumbersAllSuit( [1,3,8,10,13] )
+        arrayOfHands += createArrayOfCardsFromNumbersAllSuit( [8,9,10,11,13] )
+        arrayOfHands += createArrayOfCardsFromNumbersAllSuit( [11,12,13,14,3] )
+        for hand in arrayOfHands
+            bestMove = CardCombination.move( hand )
+            verify( bestMove, CardCombination::FLUSH, hand )
+        end
+    end
 end
