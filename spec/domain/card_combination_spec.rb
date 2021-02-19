@@ -4,13 +4,13 @@ require_relative "../../app/services/game_service.rb"
 
 gameService = GameService.new
 
-def assert( actual, expected )
-    expect( expected ).to eq( actual )
+def verify( actual, expected, handTested="" )
+    expect( expected ).to eq( actual )    
 end
 
-def createArrayOfCardsFromNumbersAndSuit( numbersSequence, suit )
+def createArrayOfCardsFromNumbersAndSuit( numbersArray, suit )
     cards = []
-    for number in numbersSequence
+    for number in numbersArray
         letter = Card.numberAsLetter( number )
         if letter
             number = letter
@@ -20,10 +20,10 @@ def createArrayOfCardsFromNumbersAndSuit( numbersSequence, suit )
     return cards
 end
 
-def createArrayOfCardsFromNumbersAllSuit( numbersSequence )
+def createArrayOfCardsFromNumbersAllSuit( numbersArray )
     cards = []
     for suit in Card::VALID_SUITS
-        cards << createArrayOfCardsFromNumbersAndSuit( numbersSequence, suit )
+        cards << createArrayOfCardsFromNumbersAndSuit( numbersArray, suit )
     end
     return cards
 end
@@ -31,8 +31,8 @@ end
 def createArrayOfCardsAllNumericalSequencesAllSuit( )
     cards = []
     for number in 1..13                
-        range = number..(number+4)
-        array = createArrayOfCardsFromNumbersAllSuit( range )
+        rangeArray = (number..(number+4)).to_a()
+        array = createArrayOfCardsFromNumbersAllSuit( rangeArray )
         cards = cards + array
     end
     return cards
@@ -48,7 +48,7 @@ describe CardCombination do
         for hand in cardsSequences
             arrayOfCards = gameService.convertCardCodesStringOnCardsArray( hand )
             bestMove = CardCombination.move( arrayOfCards )
-            assert( bestMove, CardCombination::ROYAL_STRAIGHT_FLUSH )
+            verify( bestMove, CardCombination::ROYAL_STRAIGHT_FLUSH, hand )
         end
     end
 

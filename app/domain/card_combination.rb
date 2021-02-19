@@ -105,7 +105,7 @@ class CardCombination
         # puts "suitCombinations.size: #{suitCombinations.size}"
         # puts "uniqueSuitValues.size: #{uniqueSuitValues.size}"
         #######################################################################
-        allSuitsEquals = suitCombinations == 5 && uniqueSuitValues.size == 1
+        allSuitsEquals = suitCombinations.size == 5 && uniqueSuitValues.size == 1
         if allSuitsEquals
             return self.moveWithFiveSuitCombination( arrayOfCards )
         end
