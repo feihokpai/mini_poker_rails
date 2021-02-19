@@ -1,7 +1,7 @@
 class Card
     attr_reader :number, :suit
 
-    VALID_NUMERICAL_NUMBERS = ('1'..'9').to_a()
+    VALID_NUMERICAL_NUMBERS = ('2'..'9').to_a()
     VALID_LETTER_NUMBERS = ["A","T","J","Q","K"]
     VALID_LETTER_NUMBERS_FROM_10 = ["T","J","Q","K"]
     VALID_NUMBERS = VALID_NUMERICAL_NUMBERS + VALID_LETTER_NUMBERS
@@ -13,12 +13,9 @@ class Card
     QUEEN_VALUE=12
     KING_VALUE=13
     TEN_TO_KING_VALUES = [10,11,12,13]
-    AFTER_KING_VALUES = [14,15,16,17]
+    AFTER_KING_VALUES = [14]
 
     ACE_PLUS_KING_VALUE=14
-    TWO_PLUS_KING_VALUE=15
-    THREE_PLUS_KING_VALUE=16
-    FOUR_PLUS_KING_VALUE=17
 
     def initialize( stringCombination )
         initialize_validations( stringCombination )
@@ -30,8 +27,8 @@ class Card
             newNumber = "A"   
         elsif TEN_TO_KING_VALUES.include?(number )
             newNumber = numberAsLetter( number )
-        elsif AFTER_KING_VALUES.include?(number )
-            newNumber = number - Card::KING_VALUE        
+        elsif not( VALID_NUMERICAL_NUMBERS.include?(number) )
+            raise ArgumentError.new( "Invalid numerical value to a card: #{number}" )
         end        
         return Card.new( "#{newNumber}#{suit}" )
     end
