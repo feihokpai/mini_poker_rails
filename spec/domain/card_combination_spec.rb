@@ -79,4 +79,20 @@ describe CardCombination do
             verify( bestMove, CardCombination::FLUSH, hand )
         end
     end
+
+    it 'move() - Four of a kind' do
+        cardsSequences = []
+        cardsSequences << 'AD AH AS AC 2D'
+        cardsSequences << '3D 3H 3S 3C 2D'
+        cardsSequences << '6D 6H 6S 6C 2D'
+        cardsSequences << 'TD TH TS TC 2D'
+        cardsSequences << 'JD JH JS JC 2D'
+        cardsSequences << 'QD QH QS QC 2D'
+        cardsSequences << 'KD KH KS KC 2D'
+        for hand in cardsSequences
+            arrayOfCards = gameService.convertCardCodesStringOnCardsArray( hand )
+            bestMove = CardCombination.move( arrayOfCards )
+            verify( bestMove, CardCombination::FOUR_OF_A_KIND, hand )
+        end
+    end
 end
