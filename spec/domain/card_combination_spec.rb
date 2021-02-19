@@ -95,4 +95,20 @@ describe CardCombination do
             verify( bestMove, CardCombination::FOUR_OF_A_KIND, hand )
         end
     end
+
+    it 'move() - Full House' do
+        cardsSequences = []
+        cardsSequences << 'AD AH AS 2C 2D'
+        cardsSequences << '3D 3H 3S 5C 5D'
+        cardsSequences << '6D 6H 6S 8C 8D'
+        cardsSequences << 'TD TH TS JC JD'
+        cardsSequences << 'JD JH JS QC QD'
+        cardsSequences << 'QD QH QS KC KD'
+        cardsSequences << 'KD KH KS AC AD'
+        for hand in cardsSequences
+            arrayOfCards = gameService.convertCardCodesStringOnCardsArray( hand )
+            bestMove = CardCombination.move( arrayOfCards )
+            verify( bestMove, CardCombination::FULL_HOUSE, hand )
+        end
+    end
 end
