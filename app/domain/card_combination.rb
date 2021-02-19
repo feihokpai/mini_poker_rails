@@ -92,36 +92,38 @@ class CardCombination
     def self.moveWithFiveSuitCombination( arrayOfCards )
         isANumericalSequence = self.cardsInNumericalSequence?( arrayOfCards )
         return FLUSH if not isANumericalSequence
-        orderedNumbers = self.numbersOrderedAsIntegers( arrayOfCards )
+        orderedNumbers = self.numbersOrderedAsIntegersConsideringTheKing( arrayOfCards )
         isFirstCardNumber10 = orderedNumbers.first == Card::TEN_VALUE
-        isLastCardNumber1 = orderedNumbers.last == Card::ACE_VALUE
+        isLastCardNumber1 = orderedNumbers.last == Card::ACE_PLUS_KING_VALUE
         if (isFirstCardNumber10 && isLastCardNumber1)
             return ROYAL_STRAIGHT_FLUSH 
         end
         return STRAIGHT_FLUSH
     end
 
-    def self.cardsInRoyalStreetFlushNumericalSequence?( arrayOfCards )
-        orderedNumbers = self.numbersOrderedAsIntegers( arrayOfCards )
-        royalSequence = ["T","J","Q","K","A"]
-    end
-
     def self.cardsInNumericalSequence?( arrayOfCards )
-        orderedNumbers = self.numbersOrderedAsIntegers( arrayOfCards )
-        includeKing = orderedNumbers.include?( Card::KING_VALUE )       
-        if not(includeKing)
-            return ArrayUtil.isAnArrayWithAllValuesAsIntegersInSequence?( orderedNumbers ) 
-        end
-        for number in 1..4
-            newValue = Card::KING_VALUE + number
-            orderedNumbers = ArrayUtil.changeValue( orderedNumbers, number, newValue )
-        end
+        orderedNumbers = self.numbersOrderedAsIntegersConsideringTheKing( arrayOfCards )
         return ArrayUtil.isAnArrayWithAllValuesAsIntegersInSequence?( orderedNumbers ) 
     end
 
     def self.numbersOrdered( arrayOfCards )
         numericalValues = self.numericalValues( arrayOfCards )
         return numericalValues.sort
+    end
+
+    def self.numbersOrderedAsIntegersConsideringTheKing( arrayOfCards )
+        orderedNumbers = self.numbersOrderedAsIntegers( arrayOfCards )
+        includesKing = orderedNumbers.include?( Card::KING_VALUE )       
+        if not(includesKing)
+            return orderedNumbers
+        end
+        copyOfOrderedNumbers = orderedNumbers.clone()
+        for number in 1..4
+            newValue = Card::KING_VALUE + number
+            copyOfOrderedNumbers = ArrayUtil.changeValue( copyOfOrderedNumbers, number, newValue )
+        end
+        reorderedNumbers = copyOfOrderedNumbers.sort
+        return reorderedNumbers
     end
 
     def self.numbersOrderedAsIntegers( arrayOfCards )

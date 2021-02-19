@@ -12,6 +12,11 @@ class Card
     QUEEN_VALUE=12
     KING_VALUE=13
 
+    ACE_PLUS_KING_VALUE=14
+    TWO_PLUS_KING_VALUE=15
+    THREE_PLUS_KING_VALUE=16
+    FOUR_PLUS_KING_VALUE=17
+
     def initialize( stringCombination )
         initialize_validations( stringCombination )
     end
