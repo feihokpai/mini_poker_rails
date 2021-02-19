@@ -4,9 +4,19 @@ require_relative "../../app/services/game_service.rb"
 
 gameService = GameService.new
 
+
 def verify( actual, expected, handTested="" )
     expect( expected ).to eq( actual )    
 end
+
+def notPassed( )
+    verify( true, false)
+end
+
+def passed()
+    verify( true, true)
+end
+
 
 def createArrayOfCardsFromNumbersAndSuit( numbersArray, suit )
     cards = []
@@ -39,6 +49,28 @@ def createArrayOfCardsAllNumericalSequencesAllSuit( )
 end
 
 describe CardCombination do
+
+    it 'move() - Verifying of repeated cards in a hand or deck' do
+        cardsSequences = []
+        cardsSequences << 'AD AH AS 2C AD'
+        cardsSequences << '3D 3H 3S 5D 5D'
+        cardsSequences << '6D 6H 6S 8C 6D'
+        cardsSequences << 'TD TH TD JC JD'
+        cardsSequences << 'JD JH JH QC QD'
+        cardsSequences << 'QD QH QS QH KD'
+        cardsSequences << 'KD KH KS AC AC'
+        cardsSequences << 'KH KH KS AC AD'
+        for hand in cardsSequences
+            arrayOfCards = gameService.convertCardCodesStringOnCardsArray( hand )
+            begin
+                bestMove = CardCombination.move( arrayOfCards )
+                puts "Should throw an exception, but not did. Verifying: #{arrayOfCards}"
+                notPassed()
+            rescue ArgumentError => ex                
+            end
+        end
+    end
+
     it 'move() - Royal Straight Flush' do
         cardsSequences = []
         cardsSequences << 'TD JD QD KD AD'

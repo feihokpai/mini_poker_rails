@@ -194,6 +194,15 @@ class CardCombination
         self.validateArrayOfCards( arrayOfCards )
         numberOfCards = arrayOfCards.size
         raise "It was expected 5 cards. received: #{numberOfCards}" if numberOfCards != 5
+        self.validateIfAllCardsAreUnique( arrayOfCards )
+    end
+
+    def self.validateIfAllCardsAreUnique( arrayOfCards )
+        stringValuesArray = arrayOfCards.map { |card| card.stringDefinition }
+        uniqueStringValues = stringValuesArray.uniq()
+        if uniqueStringValues.size < 5
+            raise ArgumentError.new( "It's not allowed repeated cards in hand or deck" )
+        end
     end
 
     def self.validateArrayOfCards( arrayOfCards )
