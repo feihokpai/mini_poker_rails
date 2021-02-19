@@ -21,10 +21,6 @@ end
 def createArrayOfCardsFromNumbersAndSuit( numbersArray, suit )
     cards = []
     for number in numbersArray
-        letter = Card.numberAsLetter( number )
-        if letter
-            number = letter
-        end
         cards << Card.create( number, suit )
     end
     return cards

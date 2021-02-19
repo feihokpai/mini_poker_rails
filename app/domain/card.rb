@@ -13,6 +13,7 @@ class Card
     QUEEN_VALUE=12
     KING_VALUE=13
     TEN_TO_KING_VALUES = [10,11,12,13]
+    TWO_TO_NINE_VALUES = [2,3,4,5,6,7,8,9]
     AFTER_KING_VALUES = [14]
 
     ACE_PLUS_KING_VALUE=14
@@ -27,7 +28,7 @@ class Card
             newNumber = "A"   
         elsif TEN_TO_KING_VALUES.include?(number )
             newNumber = numberAsLetter( number )
-        elsif not( VALID_NUMERICAL_NUMBERS.include?(number) )
+        elsif not( TWO_TO_NINE_VALUES.include?(number) )
             raise ArgumentError.new( "Invalid numerical value to a card: #{number}" )
         end        
         return Card.new( "#{newNumber}#{suit}" )
