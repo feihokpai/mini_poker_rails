@@ -37,6 +37,18 @@ class Card
         return KING_VALUE if @number == "K"
     end
 
+    def stringDefinition
+        return "#{number}#{suit}"
+    end
+
+    def to_s()
+        return "Card(number=#{number},suit=#{suit})"
+    end
+
+    def to_str
+        return to_s
+    end
+
     private 
 
     def argumentErrorMessageBase        

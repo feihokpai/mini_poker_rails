@@ -18,6 +18,10 @@ class CardCombination
     STRAIGHT_FLUSH = CardCombination.new( 9, "Straight Flush" )
     ROYAL_STRAIGHT_FLUSH = CardCombination.new( 10, "Royal Straight Flush" )
 
+    def to_s
+        return "name: #{@name}, pontuation: #{@pontuation}"
+    end
+
     def self.move( arrayOfCards )
         numericalCombinations = self.getNumericalDuplicatesInHand( arrayOfCards )        
         if numericalCombinations.empty?
@@ -26,7 +30,43 @@ class CardCombination
         return self.moveWithNumericalCombinations( arrayOfCards, numericalCombinations )
     end
 
+    def self.bestMoveUsingHandAndDeck( handCards, deckCards )
+        self.validateHandOrSuitCards( deckCards )
+        bestMoves = []
+        bestMoves[0] = self.bestMoveTradingNCards( handCards, deckCards, 0 )
+        bestMoves[1] = self.bestMoveTradingNCards( handCards, deckCards, 1 )
+        bestMoves[2] = self.bestMoveTradingNCards( handCards, deckCards, 2 )
+        bestMoves[3] = self.bestMoveTradingNCards( handCards, deckCards, 3 )
+        bestMoves[4] = self.bestMoveTradingNCards( handCards, deckCards, 4 )
+        bestMoves[5] = self.bestMoveTradingNCards( handCards, deckCards, 5 )
+        orderedMoves = bestMoves.sort_by { |move| move.pontuation }
+        return orderedMoves.last
+    end
+
     private
+
+    def self.bestMoveTradingNCards( handCards, deckCards, numberOfCards )
+        bestMove = self.move( handCards )
+        return bestMove if numberOfCards == 0
+
+        cardIndexes = [0,1,2,3,4]
+        possibleCombinationsArray = cardIndexes.combination( numberOfCards ).to_a()
+
+        for combinationArray in possibleCombinationsArray
+            copyOfHandCards = handCards.clone()
+            nextDeckCardsIndex = 0
+            for index in combinationArray
+                puts "array: #{combinationArray}"
+                copyOfHandCards[index] = deckCards[ nextDeckCardsIndex ]                
+                nextDeckCardsIndex += 1
+            end
+            newMove = self.move( copyOfHandCards )
+            if newMove.pontuation > bestMove.pontuation
+                bestMove = newMove
+            end
+        end
+        return bestMove
+    end
 
     def self.moveWithNumericalCombinations( arrayOfCards, numericalCombinations )   
         return ONE_PAIR if numericalCombinations.size == 2
@@ -53,8 +93,8 @@ class CardCombination
         isANumericalSequence = self.cardsInNumericalSequence?( arrayOfCards )
         return FLUSH if not isANumericalSequence
         orderedNumbers = self.numbersOrderedAsIntegers( arrayOfCards )
-        isFirstCardA10 = orderedNumbers.first == Card::TEN_VALUE
-        isLastCardA1 = orderedNumbers.last == Card::ACE_VALUE
+        isFirstCardNumber10 = orderedNumbers.first == Card::TEN_VALUE
+        isLastCardNumber1 = orderedNumbers.last == Card::ACE_VALUE
         if (isFirstCardNumber10 && isLastCardNumber1)
             return ROYAL_STRAIGHT_FLUSH 
         end
@@ -90,7 +130,7 @@ class CardCombination
     end
 
     def self.getNumericalDuplicatesInHand( arrayOfCards )
-        validateHandCards( arrayOfCards )
+        validateHandOrSuitCards( arrayOfCards )
         numericalValues = self.numericalValues( arrayOfCards )
         numericalCombinations = ArrayUtil.duplicateValues( numericalValues )        
         return numericalCombinations
@@ -105,13 +145,13 @@ class CardCombination
     end
 
     def self.getSuitDuplicatesInHand( arrayOfCards )
-        self.validateHandCards( arrayOfCards )
+        self.validateHandOrSuitCards( arrayOfCards )
         suitValues = arrayOfCards.map { |card| card.suit  }
         suitCombinations = ArrayUtil.duplicateValues( suitValues )        
         return suitCombinations
     end
 
-    def self.validateHandCards( arrayOfCards )
+    def self.validateHandOrSuitCards( arrayOfCards )
         self.validateArrayOfCards( arrayOfCards )
         numberOfCards = arrayOfCards.size
         raise "It was expected 5 cards. received: #{numberOfCards}" if numberOfCards != 5
