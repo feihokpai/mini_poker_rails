@@ -55,8 +55,13 @@ describe CardCombination do
     it 'move() - Straight Flush' do
         arrayOfHandsWithCards = createArrayOfCardsAllNumericalSequencesAllSuit()        
         for hand in arrayOfHandsWithCards
+            firstCardIs10 = hand.first.numberAsInteger == Card::TEN_VALUE
+            lastCardIs1 = hand.last.numberAsInteger == Card::ACE_VALUE
+            if firstCardIs10 && lastCardIs1
+                next
+            end
             bestMove = CardCombination.move( hand )
-            assert( bestMove, CardCombination::STRAIGHT_FLUSH )
+            verify( bestMove, CardCombination::STRAIGHT_FLUSH, hand )
         end
     end
 end
