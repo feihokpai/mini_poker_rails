@@ -143,4 +143,20 @@ describe CardCombination do
             verify( bestMove, CardCombination::FULL_HOUSE, hand )
         end
     end
+
+    it 'move() - Straight' do
+        cardsSequences = []
+        cardsSequences << 'AD 2H 3S 4C 5D'
+        cardsSequences << '3D 4H 5S 6C 7D'
+        cardsSequences << '6D 7H 8S 9C TD'
+        cardsSequences << 'TD JH QS KC AD'
+        cardsSequences << 'JD QH KS AC 2D'
+        cardsSequences << 'QD KH AS 2C 3D'
+        cardsSequences << 'KD AH 2S 3C 4D'
+        for hand in cardsSequences
+            arrayOfCards = gameService.convertCardCodesStringOnCardsArray( hand )
+            bestMove = CardCombination.move( arrayOfCards )
+            verify( bestMove, CardCombination::STRAIGHT, hand )
+        end
+    end
 end
