@@ -47,7 +47,7 @@ class CardCombination
 
     def self.bestMoveTradingNCards( handCards, deckCards, numberOfCards )        
         cardCombination = self.combination( handCards )  
-        bestResult = { :combination => cardCombination, :move => handCards }
+        bestResult = { :combination => cardCombination, :move => handCards, :hand => handCards, :deck => deckCards }
         return bestResult if numberOfCards == 0
 
         cardIndexes = [0,1,2,3,4]
