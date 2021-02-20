@@ -151,10 +151,7 @@ class CardCombination
             return orderedNumbers
         end
         copyOfOrderedNumbers = orderedNumbers.clone()
-        for number in 1..4
-            newValue = Card::KING_VALUE + number
-            copyOfOrderedNumbers = ArrayUtil.changeValue( copyOfOrderedNumbers, number, newValue )
-        end
+        copyOfOrderedNumbers = ArrayUtil.changeValue( copyOfOrderedNumbers, Card::ACE_VALUE, Card::ACE_PLUS_KING_VALUE )
         #################################################################
         # puts "copyOfOrderedNumbers after change values:"
         # puts copyOfOrderedNumbers

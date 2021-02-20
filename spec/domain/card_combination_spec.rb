@@ -105,10 +105,6 @@ describe CardCombination do
         arrayOfHands += createArrayOfCardsFromNumbersAllSuit( [11,12,13,14,3] )
         for hand in arrayOfHands
             bestMove = CardCombination.move( hand )
-            #################################################
-            # puts "hand: #{hand}"
-            # puts "result: #{bestMove} - expected: #{CardCombination::HIGHEST_CARD}"
-            #################################################
             verify( bestMove, CardCombination::FLUSH, hand )
         end
     end
@@ -148,16 +144,84 @@ describe CardCombination do
     it 'move() - Straight' do
         cardsSequences = []
         cardsSequences << 'AD 2H 3S 4C 5D'
+        cardsSequences << '2D 3H 4S 5C 6D'
         cardsSequences << '3D 4H 5S 6C 7D'
+        cardsSequences << '5H 6H 7H 8H 9D'
         cardsSequences << '6D 7H 8S 9C TD'
-        cardsSequences << 'TD JH QS KC AD'
-        cardsSequences << 'JD QH KS AC 2D'
-        cardsSequences << 'QD KH AS 2C 3D'
-        cardsSequences << 'KD AH 2S 3C 4D'
+        cardsSequences << 'TD JH QS KC AD'        
+        
         for hand in cardsSequences
             arrayOfCards = gameService.convertCardCodesStringOnCardsArray( hand )
             bestMove = CardCombination.move( arrayOfCards )
             verify( bestMove, CardCombination::STRAIGHT, hand )
+        end
+    end
+
+    it 'move() - Three of a kind' do
+        cardsSequences = []
+        cardsSequences << 'AD AH AS 3C 2D'
+        cardsSequences << '3D 3H 3S 4C 2D'
+        cardsSequences << '6D 6H 6S 7C 2D'
+        cardsSequences << 'TD TH TS AC 2D'
+        cardsSequences << 'JD JH JS AC 2D'
+        cardsSequences << 'QD QH QS KC 2D'
+        cardsSequences << 'KD KH KS AC 2D'
+        for hand in cardsSequences
+            arrayOfCards = gameService.convertCardCodesStringOnCardsArray( hand )
+            bestMove = CardCombination.move( arrayOfCards )
+            verify( bestMove, CardCombination::THREE_OF_A_KIND, hand )
+        end
+    end
+
+
+    it 'move() - Two pairs' do
+        cardsSequences = []
+        cardsSequences << 'AD AH 3S 3C 2D'
+        cardsSequences << '3D 3H 4S 4C 2D'
+        cardsSequences << '6D 6H 2S 7C 2D'
+        cardsSequences << 'TD TH 2S AC 2D'
+        cardsSequences << 'JD JH AS AC 2D'
+        cardsSequences << 'QD QH 2S KC 2D'
+        cardsSequences << 'KD KH AS AC 2D'
+        for hand in cardsSequences
+            arrayOfCards = gameService.convertCardCodesStringOnCardsArray( hand )
+            bestMove = CardCombination.move( arrayOfCards )
+            verify( bestMove, CardCombination::TWO_PAIRS, hand )
+        end
+    end
+
+    it 'move() - One pair' do
+        cardsSequences = []
+        cardsSequences << 'AD AH 5S 3C 2D'
+        cardsSequences << '3D 3H 6S 4C 2D'
+        cardsSequences << '6D 6H 8S 7C 2D'
+        cardsSequences << 'TD TH 3S AC 2D'
+        cardsSequences << 'JD JH KS AC 2D'
+        cardsSequences << 'QD QH AS KC 2D'
+        cardsSequences << 'KD KH 3S AC 2D'
+        for hand in cardsSequences
+            arrayOfCards = gameService.convertCardCodesStringOnCardsArray( hand )
+            bestMove = CardCombination.move( arrayOfCards )
+            verify( bestMove, CardCombination::ONE_PAIR, hand )
+        end
+    end
+
+    it 'move() - Highest Card' do
+        cardsSequences = []
+        cardsSequences << 'AD 6H 5S 3C 2D'
+        cardsSequences << '3D 9H 6S 4C 2D'
+        cardsSequences << '6D AH 8S 7C 2D'
+        cardsSequences << 'TD QH 3S AC 2D'
+        cardsSequences << 'JD 4H KS AC 2D'
+        cardsSequences << 'QD 3H AS KC 2D'
+        cardsSequences << 'KD 5H 3S AC 2D'
+        cardsSequences << 'JD QH KS AC 2D'
+        cardsSequences << 'QH KS AC 2D 3D'
+        cardsSequences << 'KS AC 2D 3D 4S'
+        for hand in cardsSequences
+            arrayOfCards = gameService.convertCardCodesStringOnCardsArray( hand )
+            bestMove = CardCombination.move( arrayOfCards )
+            verify( bestMove, CardCombination::HIGHEST_CARD, hand )
         end
     end
 end
