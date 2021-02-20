@@ -24,11 +24,11 @@ class GameController < ApplicationController
         begin
             file = createNewFileFromUploadedFile() 
             fileName = File.basename(file)
-            jsonResponse = { :message => fileName }            
+            jsonResponse = { :message => fileName, :success => 1 }            
         rescue StandardError => exception
             printLinesOfBackTrace( exception, 10 )
             @messageToUser = "An Unexpected error ocurred during upload: #{exception.message}"
-            jsonResponse = { :message => @messageToUser }
+            jsonResponse = { :message => @messageToUser, :success => 0 }
         ensure
             render :json => jsonResponse
         end
