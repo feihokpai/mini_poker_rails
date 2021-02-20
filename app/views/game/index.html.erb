@@ -2,6 +2,7 @@
 
 <script type="text/javascript"> 
     var uploadedFileName = ""
+    disableSubmitButton();
 
     function urlToSubmit(){
         return "process_file?file_name='"+uploadedFileName+"'"
@@ -12,11 +13,11 @@
     }
 
     function enableSubmitButton(){
-
+        $("#submitButton").prop("disabled", false );
     }
 
     function disableSubmitButton(){
-
+        $("#submitButton").prop("disabled", true );
     }
 
     function upload_file() {
@@ -54,7 +55,7 @@
             <input type="file" id="file" name="file" /> 
             <input type="button" class="button" value="Upload" id="but_upload" onclick="upload_file();"> 
             <br/><br/>
-            <input type="submit" class="button" value="Process the file" id="submitButton"> 
+            <input type="submit" class="button" value="Process the file" id="submitButton" disabled="true"> 
         </div> 
     </form> 
 </div>  
