@@ -5,7 +5,7 @@
     disableSubmitButton();
 
     function urlToSubmit(){
-        return "process_file?file_name='"+uploadedFileName+"'"
+        return "process_file?file_name="+uploadedFileName
     }
 
     function changeActionValueInForm(){
@@ -49,13 +49,14 @@
 </script>
 
 <div align="center"> 
-    <p>Send a file with your hand cards and the ordered first five Deck Cards</p>
-    <form action="process_file" method="post" action="" enctype="multipart/form-data" id="myform"> 
-        <div > 
-            <input type="file" id="file" name="file" /> 
-            <input type="button" class="button" value="Upload" id="but_upload" onclick="upload_file();"> 
-            <br/><br/>
-            <input type="submit" class="button" value="Process the file" id="submitButton" disabled="true"> 
-        </div> 
-    </form> 
+    <p>Send a file with your hand cards and the ordered first five Deck Cards</p>    
+    <div > 
+        <input type="file" id="file" name="file" /> 
+        <input type="button" class="button" value="Upload" id="but_upload" onclick="upload_file();"> 
+        <br/><br/>
+        <form action="nowhere" method="post" action="" enctype="multipart/form-data" id="myform"> 
+            <input type="hidden" value="<%= form_authenticity_token() %>" name="authenticity_token"/>
+            <input type="submit" class="button" value="Process file" id="submitButton" disabled="true"> 
+        </form> 
+    </div>     
 </div>  

@@ -35,13 +35,18 @@ class GameController < ApplicationController
     end    
 
     def process_file
-        @fileContent = File.read("files/text.txt")
-        @lines = @fileContent.split("\n")
-        lineNumber = 0
-        @problematicLine = ""
         begin
+            fileName = params["file_name"]
+            if not( fileName.present? )
+                raise "The processing failed, because no file was sent."
+            end
+            pathFile = "#{getFolderPath}#{fileName}"
+            @fileContent = File.read( pathFile )
+            @lines = @fileContent.split("\n")
+            lineNumber = 0
+            @problematicLine = ""
+        
             for line in @lines
-                # @problematicLine = line
                 lineNumber += 1
                 @processedLines << processLine( line )
             end
@@ -50,8 +55,7 @@ class GameController < ApplicationController
             @problematicLine = exception.line            
         rescue StandardError => exception
             @messageToUser = "An Unexpected error ocurred: #{exception.message}"
-            tenLinesOfBackTrace = exception.backtrace[0..10]
-            puts tenLinesOfBackTrace
+            printLinesOfBackTrace( exception, 10 )
         ensure
             puts "Problematic line: #{@problematicLine}"
         end
@@ -104,6 +108,12 @@ class GameController < ApplicationController
     def validateFile( userFile )
         
     end
+
+    # def getFileContent()
+    #     file = params["file"]
+    #     content = File.read("files/text.txt")
+    #     return content
+    # end
 
     def processLine( lineContent )
         allCodeCards = lineContent.split(" ")        
