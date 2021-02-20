@@ -1,4 +1,5 @@
 require_relative "../../app/domain/card.rb"
+require_relative "../../app/domain/domain_object.rb"
 
 def notPassedWithMessage( msg )
     puts "msg: #{msg}" 

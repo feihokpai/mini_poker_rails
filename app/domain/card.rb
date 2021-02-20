@@ -1,4 +1,4 @@
-class Card
+class Card < DomainObject
     attr_reader :number, :suit
 
     VALID_NUMERICAL_NUMBERS = ('2'..'9').to_a()

@@ -1,3 +1,4 @@
+require_relative "../../app/domain/domain_object.rb"
 require_relative "../../app/domain/card.rb"
 require_relative "../../app/domain/card_combination.rb"
 require_relative "../../app/services/game_service.rb"
