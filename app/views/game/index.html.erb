@@ -1,0 +1,62 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
+
+<script type="text/javascript"> 
+    var uploadedFileName = ""
+    disableSubmitButton();
+
+    function urlToSubmit(){
+        return "process_file?file_name="+uploadedFileName
+    }
+
+    function changeActionValueInForm(){
+        $("#myform")[0].action = urlToSubmit();
+    }
+
+    function enableSubmitButton(){
+        $("#submitButton").prop("disabled", false );
+    }
+
+    function disableSubmitButton(){
+        $("#submitButton").prop("disabled", true );
+    }
+
+    function upload_file() {
+        var formData = new FormData();
+        var files = $('#file')[0].files[0];
+        formData.append('file', files);
+
+        $.ajax({ 
+            url: 'send_file', 
+            type: 'post', 
+            data: formData, 
+            dataType: "json",
+            beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
+            contentType: false, 
+            processData: false, 
+            success: function(response){ 
+                if( response.success ){
+                    uploadedFileName = response.message
+                    enableSubmitButton();
+                    changeActionValueInForm()
+                }else{
+                    uploadedFileName = ""
+                    disableSubmitButton();
+                }               
+                alert( response.message )                
+            }, 
+        }); 
+    }   
+</script>
+
+<div align="center"> 
+    <p>Send a file with your hand cards and the ordered first five Deck Cards</p>    
+    <div > 
+        <input type="file" id="file" name="file" /> 
+        <input type="button" class="button" value="Upload" id="but_upload" onclick="upload_file();"> 
+        <br/><br/>
+        <form action="nowhere" method="post" action="" enctype="multipart/form-data" id="myform"> 
+            <input type="hidden" value="<%= form_authenticity_token() %>" name="authenticity_token"/>
+            <input type="submit" class="button" value="Process file" id="submitButton" disabled="true"> 
+        </form> 
+    </div>     
+</div>  
