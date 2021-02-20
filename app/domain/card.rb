@@ -68,6 +68,13 @@ class Card
         return "#{number}#{suit}"
     end
 
+    def self.convertCardsArrayToString( cardsArray )   
+        self.validate_convertCardsArrayOnCardCodesString( cardsArray )           
+        allCodeCards = cardsArray.map { |card| card.stringDefinition }
+        codeCardsString = allCodeCards.join( " " )
+        return codeCardsString
+    end
+
     def to_s()
         return "Card(number=#{number},suit=#{suit})"
     end
@@ -108,5 +115,9 @@ class Card
         validSuit = Card::VALID_SUITS.include?( cardSuit )
         argumentError( "a invalid suit value: #{value}" ) if not validSuit        
         @suit = cardSuit
+    end
+
+    def self.validate_convertCardsArrayOnCardCodesString( cardsArray )
+        ValidateUtil.raiseIfIsNotAnArrayWithOnly( cardsArray, Card )
     end
 end
