@@ -106,7 +106,11 @@ class GameController < ApplicationController
     end
 
     def validateFile( userFile )
-        
+        extNameWithPoint = File.extname( userFile )
+        extension = extNameWithPoint[1..-1]
+        if (extension != "txt" && extension != "TXT")
+            raise "It was uploaded a file with invalid extension: '#{extNameWithPoint}'. Allowed: '.txt'"
+        end
     end
 
     # def getFileContent()
