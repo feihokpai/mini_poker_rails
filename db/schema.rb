@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_20_214920) do
+ActiveRecord::Schema.define(version: 2021_02_20_224200) do
 
   create_table "cards", force: :cascade do |t|
     t.integer "number"
@@ -28,6 +28,17 @@ ActiveRecord::Schema.define(version: 2021_02_20_214920) do
   create_table "hands", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+  end
+
+  create_table "moves", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.integer "initial_hand_id"
+    t.integer "deck_hand_id"
+    t.integer "best_hand_id"
+    t.index ["best_hand_id"], name: "index_moves_on_best_hand_id"
+    t.index ["deck_hand_id"], name: "index_moves_on_deck_hand_id"
+    t.index ["initial_hand_id"], name: "index_moves_on_initial_hand_id"
   end
 
   create_table "moves_old", force: :cascade do |t|
