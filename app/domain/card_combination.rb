@@ -22,7 +22,7 @@ class CardCombination
         return "name: #{@name}, pontuation: #{@pontuation}"
     end
 
-    def self.move( arrayOfCards )
+    def self.combination( arrayOfCards )
         numericalCombinations = self.getNumericalDuplicatesInHand( arrayOfCards )        
         if numericalCombinations.empty?
             return self.moveWithZeroNumericalCombinations( arrayOfCards )
@@ -32,22 +32,23 @@ class CardCombination
 
     def self.bestMoveUsingHandAndDeck( handCards, deckCards )
         self.validateHandOrSuitCards( deckCards )
-        bestMoves = []
-        bestMoves[0] = self.bestMoveTradingNCards( handCards, deckCards, 0 )
-        bestMoves[1] = self.bestMoveTradingNCards( handCards, deckCards, 1 )
-        bestMoves[2] = self.bestMoveTradingNCards( handCards, deckCards, 2 )
-        bestMoves[3] = self.bestMoveTradingNCards( handCards, deckCards, 3 )
-        bestMoves[4] = self.bestMoveTradingNCards( handCards, deckCards, 4 )
-        bestMoves[5] = self.bestMoveTradingNCards( handCards, deckCards, 5 )
-        orderedMoves = bestMoves.sort_by { |move| move.pontuation }
+        bestResults = []
+        bestResults[0] = self.bestMoveTradingNCards( handCards, deckCards, 0 )
+        bestResults[1] = self.bestMoveTradingNCards( handCards, deckCards, 1 )
+        bestResults[2] = self.bestMoveTradingNCards( handCards, deckCards, 2 )
+        bestResults[3] = self.bestMoveTradingNCards( handCards, deckCards, 3 )
+        bestResults[4] = self.bestMoveTradingNCards( handCards, deckCards, 4 )
+        bestResults[5] = self.bestMoveTradingNCards( handCards, deckCards, 5 )
+        orderedMoves = bestResults.sort_by { |result| result[:combination].pontuation }
         return orderedMoves.last
     end
 
     private
 
-    def self.bestMoveTradingNCards( handCards, deckCards, numberOfCards )
-        bestMove = self.move( handCards )
-        return bestMove if numberOfCards == 0
+    def self.bestMoveTradingNCards( handCards, deckCards, numberOfCards )        
+        cardCombination = self.combination( handCards )  
+        bestResult = { :combination => cardCombination, :move => handCards }
+        return bestResult if numberOfCards == 0
 
         cardIndexes = [0,1,2,3,4]
         possibleCombinationsArray = cardIndexes.combination( numberOfCards ).to_a()
@@ -59,12 +60,13 @@ class CardCombination
                 copyOfHandCards[index] = deckCards[ nextDeckCardsIndex ]                
                 nextDeckCardsIndex += 1
             end
-            newMove = self.move( copyOfHandCards )
-            if newMove.pontuation > bestMove.pontuation
-                bestMove = newMove
+            newCombination = self.combination( copyOfHandCards )
+            if newCombination.pontuation > bestResult[:combination].pontuation
+                bestResult[:combination] = newCombination
+                bestResult[:move] = copyOfHandCards
             end
         end
-        return bestMove
+        return bestResult
     end
 
     def self.moveWithNumericalCombinations( arrayOfCards, numericalCombinations )   

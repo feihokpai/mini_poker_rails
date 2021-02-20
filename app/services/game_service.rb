@@ -6,8 +6,8 @@ class GameService < GenericService
         validate_analyzeBestMove( arrayOfCards )
         handCards = arrayOfCards[0..4]        
         deckCards = arrayOfCards[5..9]        
-        bestMove = CardCombination.bestMoveUsingHandAndDeck( handCards, deckCards )
-        return bestMove
+        bestResult = CardCombination.bestMoveUsingHandAndDeck( handCards, deckCards )
+        return bestResult
     end
 
     def validateLineOfCardCodes( cardCodesArray )        
@@ -65,7 +65,5 @@ class GameService < GenericService
         numberOfCards = arrayOfCards.size
         raise "It was expected 10 cards, but received: #{numberOfCards}" if numberOfCards != 10
     end
-
-
 
 end

@@ -113,23 +113,19 @@ class GameController < ApplicationController
         end
     end
 
-    # def getFileContent()
-    #     file = params["file"]
-    #     content = File.read("files/text.txt")
-    #     return content
-    # end
-
     def processLine( lineContent )
         allCodeCards = lineContent.split(" ")        
         @gameService.validateLineOfCardCodes( allCodeCards )   
         @cardsArray = @gameService.convertOnCardsArray( allCodeCards )
-        bestMove = @gameService.analyzeBestMove( @cardsArray )
-        bestMoveDescription = bestMove.nil? ? "Failed" : bestMove.name
+        bestResult = @gameService.analyzeBestMove( @cardsArray )
+        bestMoveDescription = bestResult.nil? ? "Failed" : bestResult[:combination].name
         handCards = allCodeCards[0..4]
         stringHandCards = handCards.join(" ")
         first5DeckCards = allCodeCards[5..9]        
         stringFirst5DeckCards = first5DeckCards.join(" ")
-        textToUser = "Hand: #{stringHandCards} Deck: #{stringFirst5DeckCards} - Best game: #{bestMoveDescription}"
+        textToUser = "Hand: #{stringHandCards} Deck: #{stringFirst5DeckCards} - Best combination: #{bestMoveDescription}"
+        bestMoveString = Card.convertCardsArrayToString( bestResult[:move] )
+        textToUser += " - (#{bestMoveString})"
         return textToUser
     end
 
