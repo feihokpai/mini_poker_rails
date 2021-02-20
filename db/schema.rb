@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_20_212849) do
+ActiveRecord::Schema.define(version: 2021_02_20_214920) do
 
   create_table "cards", force: :cascade do |t|
     t.integer "number"
@@ -18,6 +18,16 @@ ActiveRecord::Schema.define(version: 2021_02_20_212849) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.index ["suit_id"], name: "index_cards_on_suit_id"
+  end
+
+  create_table "cards_hands", id: false, force: :cascade do |t|
+    t.integer "card_id", null: false
+    t.integer "hand_id", null: false
+  end
+
+  create_table "hands", force: :cascade do |t|
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "moves_old", force: :cascade do |t|
