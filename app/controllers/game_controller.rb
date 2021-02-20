@@ -20,6 +20,17 @@ class GameController < ApplicationController
         render :not_started
     end
 
+    def send_file
+        begin
+            file = createNewFileFromUploadedFile() 
+            return ""       
+        rescue StandardError => exception
+            printLinesOfBackTrace( exception, 10 )
+            @messageToUser = "An Unexpected error ocurred during upload: #{exception.message}"
+            return @messageToUser
+        end
+    end    
+
     def process_file
         @fileContent = File.read("files/text.txt")
         @lines = @fileContent.split("\n")
@@ -44,6 +55,49 @@ class GameController < ApplicationController
     end
 
     private
+
+    def printLinesOfBackTrace( exception, numberOfLines )
+        lastLine = numberOfLines-1
+        linesOfBackTrace = exception.backtrace[0..lastLine]
+        puts linesOfBackTrace
+    end
+
+    def createNewFileFromUploadedFile()
+        contentUserFile = getContentUserFile()        
+        saveContentInNewFile( contentUserFile )
+    end
+
+    def saveContentInNewFile( contentUserFile )
+        newFile = createNewFileWithTimestampName()
+        newFile.puts( contentUserFile )        
+        newFile.close()
+    end
+
+    def getContentUserFile()
+        userFile = params["file"]        
+        validateFile( userFile )
+        fileContent = userFile.read
+        userFile.close()
+        return fileContent
+    end
+
+    def createNewFileWithTimestampName()
+        timestamp = StringUtil.timestampString()
+        fileNewName = "upload_#{timestamp}.txt"
+        folderPath = getFolderPath()
+        filePath = "#{folderPath}#{fileNewName}"
+        writeMode = "w"
+        newFile = File.new( filePath, writeMode)        
+        return newFile
+    end
+
+    def getFolderPath()
+        return "files/"
+    end
+
+    def validateFile( userFile )
+        
+    end
 
     def processLine( lineContent )
         allCodeCards = lineContent.split(" ")        

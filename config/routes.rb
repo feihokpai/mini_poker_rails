@@ -3,4 +3,9 @@ Rails.application.routes.draw do
 
   root to: "game#index" 
 
+  # get "enter_game", to: "game#enter"
+
+  post "send_file", to: "game#send_file"
+
+  post "process_file", to: "game#process_file"
 end
