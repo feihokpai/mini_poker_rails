@@ -10,15 +10,12 @@
             url: 'send_file', 
             type: 'post', 
             data: formData, 
+            dataType: "json",
             beforeSend: function(xhr) {xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))},
             contentType: false, 
             processData: false, 
             success: function(response){ 
-                if(response != 0){ 
-                    alert('file uploaded'); 
-                }else{ 
-                    alert('file not uploaded'); 
-                } 
+                alert( response.message )                
             }, 
         }); 
     }   

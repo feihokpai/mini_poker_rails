@@ -23,11 +23,14 @@ class GameController < ApplicationController
     def send_file
         begin
             file = createNewFileFromUploadedFile() 
-            return ""       
+            fileName = File.basename(file)
+            jsonResponse = { :message => fileName }            
         rescue StandardError => exception
             printLinesOfBackTrace( exception, 10 )
             @messageToUser = "An Unexpected error ocurred during upload: #{exception.message}"
-            return @messageToUser
+            jsonResponse = { :message => @messageToUser }
+        ensure
+            render :json => jsonResponse
         end
     end    
 
@@ -59,18 +62,21 @@ class GameController < ApplicationController
     def printLinesOfBackTrace( exception, numberOfLines )
         lastLine = numberOfLines-1
         linesOfBackTrace = exception.backtrace[0..lastLine]
+        puts exception.message()
         puts linesOfBackTrace
     end
 
     def createNewFileFromUploadedFile()
         contentUserFile = getContentUserFile()        
-        saveContentInNewFile( contentUserFile )
+        newFile =saveContentInNewFile( contentUserFile )
+        return newFile
     end
 
     def saveContentInNewFile( contentUserFile )
         newFile = createNewFileWithTimestampName()
         newFile.puts( contentUserFile )        
         newFile.close()
+        return newFile
     end
 
     def getContentUserFile()
