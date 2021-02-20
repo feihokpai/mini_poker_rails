@@ -1,6 +1,24 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
 
 <script type="text/javascript"> 
+    var uploadedFileName = ""
+
+    function urlToSubmit(){
+        return "process_file?file_name='"+uploadedFileName+"'"
+    }
+
+    function changeActionValueInForm(){
+        $("#myform")[0].action = urlToSubmit();
+    }
+
+    function enableSubmitButton(){
+
+    }
+
+    function disableSubmitButton(){
+
+    }
+
     function upload_file() {
         var formData = new FormData();
         var files = $('#file')[0].files[0];
@@ -15,6 +33,14 @@
             contentType: false, 
             processData: false, 
             success: function(response){ 
+                if( response.success ){
+                    uploadedFileName = response.message
+                    enableSubmitButton();
+                    changeActionValueInForm()
+                }else{
+                    uploadedFileName = ""
+                    disableSubmitButton();
+                }               
                 alert( response.message )                
             }, 
         }); 
@@ -23,10 +49,12 @@
 
 <div align="center"> 
     <p>Send a file with your hand cards and the ordered first five Deck Cards</p>
-    <form method="post" action="" enctype="multipart/form-data" id="myform"> 
+    <form action="process_file" method="post" action="" enctype="multipart/form-data" id="myform"> 
         <div > 
             <input type="file" id="file" name="file" /> 
             <input type="button" class="button" value="Upload" id="but_upload" onclick="upload_file();"> 
+            <br/><br/>
+            <input type="submit" class="button" value="Process the file" id="submitButton"> 
         </div> 
     </form> 
 </div>  
