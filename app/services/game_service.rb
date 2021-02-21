@@ -5,9 +5,9 @@ require_relative "../daos/move_dao.rb"
 class GameService < GenericService
     def analyzeBestMove( arrayOfCards )
         validate_analyzeBestMove( arrayOfCards )
-        handCards = arrayOfCards[0..4]        
-        deckCards = arrayOfCards[5..9]        
-        bestResult = CardCombination.bestMoveUsingHandAndDeck( handCards, deckCards )
+        initalHand = Hand.new( arrayOfCards[0..4] )     
+        deckHand = Hand.new( arrayOfCards[5..9]   )
+        bestResult = CardCombination.bestMoveUsingInitialHandAndDeck( initalHand, deckHand )
         saveBestResult( bestResult )
         return bestResult
     end
