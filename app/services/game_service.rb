@@ -1,13 +1,15 @@
 require_relative "generic_service.rb"
 require_relative "invalid_card_code_line_exception.rb"
+require_relative "../daos/move_dao.rb"
 
 class GameService < GenericService
     def analyzeBestMove( arrayOfCards )
         validate_analyzeBestMove( arrayOfCards )
         handCards = arrayOfCards[0..4]        
         deckCards = arrayOfCards[5..9]        
-        bestMove = CardCombination.bestMoveUsingHandAndDeck( handCards, deckCards )
-        return bestMove
+        bestResult = CardCombination.bestMoveUsingHandAndDeck( handCards, deckCards )
+        saveBestResult( bestResult )
+        return bestResult
     end
 
     def validateLineOfCardCodes( cardCodesArray )        
@@ -49,6 +51,18 @@ class GameService < GenericService
 
     private 
 
+    def saveBestResult( bestResult )
+        validate_saveBestResult( bestResult )
+        dao = MoveDao.new
+        dao.saveBestResult( bestResult[:hand], bestResult[:deck], bestResult[:move] )
+    end
+
+    def validate_saveBestResult( bestResult )
+        ValidateUtil.raiseIfValueIsNotA( bestResult, Hash )
+        ValidateUtil.raiseIfValueIsNotA( bestResult[:combination], CardCombination )
+        ValidateUtil.raiseIfIsNotAnArrayWithOnly( bestResult[:move], Card )
+    end
+
     def detachItemInArray( array, value )
         positionOfItem = array.find_index( value )
         newValue = "|#{value}|"
@@ -65,7 +79,5 @@ class GameService < GenericService
         numberOfCards = arrayOfCards.size
         raise "It was expected 10 cards, but received: #{numberOfCards}" if numberOfCards != 10
     end
-
-
 
 end

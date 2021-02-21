@@ -1,3 +1,4 @@
+require_relative "../../app/domain/domain_object.rb"
 require_relative "../../app/domain/card.rb"
 require_relative "../../app/domain/card_combination.rb"
 require_relative "../../app/services/game_service.rb"
@@ -60,7 +61,7 @@ describe CardCombination do
         for hand in cardsSequences
             arrayOfCards = gameService.convertCardCodesStringOnCardsArray( hand )
             begin
-                bestMove = CardCombination.move( arrayOfCards )
+                bestMove = CardCombination.combination( arrayOfCards )
                 puts "Should throw an exception, but not did. Verifying: #{arrayOfCards}"
                 notPassed()
             rescue ArgumentError => ex                
@@ -76,7 +77,7 @@ describe CardCombination do
         cardsSequences << 'TH JH QH KH AH'
         for hand in cardsSequences
             arrayOfCards = gameService.convertCardCodesStringOnCardsArray( hand )
-            bestMove = CardCombination.move( arrayOfCards )
+            bestMove = CardCombination.combination( arrayOfCards )
             verify( bestMove, CardCombination::ROYAL_STRAIGHT_FLUSH, hand )
         end
     end
@@ -89,7 +90,7 @@ describe CardCombination do
             if firstCardIs10 && lastCardIs1
                 next
             end
-            bestMove = CardCombination.move( hand )
+            bestMove = CardCombination.combination( hand )
             verify( bestMove, CardCombination::STRAIGHT_FLUSH, hand )
         end
     end
@@ -104,7 +105,7 @@ describe CardCombination do
         arrayOfHands += createArrayOfCardsFromNumbersAllSuit( [8,9,10,11,13] )
         arrayOfHands += createArrayOfCardsFromNumbersAllSuit( [11,12,13,14,3] )
         for hand in arrayOfHands
-            bestMove = CardCombination.move( hand )
+            bestMove = CardCombination.combination( hand )
             verify( bestMove, CardCombination::FLUSH, hand )
         end
     end
@@ -120,7 +121,7 @@ describe CardCombination do
         cardsSequences << 'KD KH KS KC 2D'
         for hand in cardsSequences
             arrayOfCards = gameService.convertCardCodesStringOnCardsArray( hand )
-            bestMove = CardCombination.move( arrayOfCards )
+            bestMove = CardCombination.combination( arrayOfCards )
             verify( bestMove, CardCombination::FOUR_OF_A_KIND, hand )
         end
     end
@@ -136,7 +137,7 @@ describe CardCombination do
         cardsSequences << 'KD KH KS AC AD'
         for hand in cardsSequences
             arrayOfCards = gameService.convertCardCodesStringOnCardsArray( hand )
-            bestMove = CardCombination.move( arrayOfCards )
+            bestMove = CardCombination.combination( arrayOfCards )
             verify( bestMove, CardCombination::FULL_HOUSE, hand )
         end
     end
@@ -152,7 +153,7 @@ describe CardCombination do
         
         for hand in cardsSequences
             arrayOfCards = gameService.convertCardCodesStringOnCardsArray( hand )
-            bestMove = CardCombination.move( arrayOfCards )
+            bestMove = CardCombination.combination( arrayOfCards )
             verify( bestMove, CardCombination::STRAIGHT, hand )
         end
     end
@@ -168,7 +169,7 @@ describe CardCombination do
         cardsSequences << 'KD KH KS AC 2D'
         for hand in cardsSequences
             arrayOfCards = gameService.convertCardCodesStringOnCardsArray( hand )
-            bestMove = CardCombination.move( arrayOfCards )
+            bestMove = CardCombination.combination( arrayOfCards )
             verify( bestMove, CardCombination::THREE_OF_A_KIND, hand )
         end
     end
@@ -185,7 +186,7 @@ describe CardCombination do
         cardsSequences << 'KD KH AS AC 2D'
         for hand in cardsSequences
             arrayOfCards = gameService.convertCardCodesStringOnCardsArray( hand )
-            bestMove = CardCombination.move( arrayOfCards )
+            bestMove = CardCombination.combination( arrayOfCards )
             verify( bestMove, CardCombination::TWO_PAIRS, hand )
         end
     end
@@ -201,7 +202,7 @@ describe CardCombination do
         cardsSequences << 'KD KH 3S AC 2D'
         for hand in cardsSequences
             arrayOfCards = gameService.convertCardCodesStringOnCardsArray( hand )
-            bestMove = CardCombination.move( arrayOfCards )
+            bestMove = CardCombination.combination( arrayOfCards )
             verify( bestMove, CardCombination::ONE_PAIR, hand )
         end
     end
@@ -220,7 +221,7 @@ describe CardCombination do
         cardsSequences << 'KS AC 2D 3D 4S'
         for hand in cardsSequences
             arrayOfCards = gameService.convertCardCodesStringOnCardsArray( hand )
-            bestMove = CardCombination.move( arrayOfCards )
+            bestMove = CardCombination.combination( arrayOfCards )
             verify( bestMove, CardCombination::HIGHEST_CARD, hand )
         end
     end
