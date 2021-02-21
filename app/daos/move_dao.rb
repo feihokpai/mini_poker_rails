@@ -1,9 +1,14 @@
-class MoveDao
-    def saveBestResult( handCards, deckCards, bestMove)
+class MoveDao < DaoInterface
+
+    def save( moveDomain )
+        puts "O save de MoveDao deveria ter sido executado, mas não foi porque ainda não foi implementado"
+    end
+
+    def saveBestResult( initialHand, deckHand, bestHand)
         ActiveRecord::Base.transaction do
-            initialHandModel = saveHand( handCards )
-            deckHandModel = saveHand( deckCards )
-            besHandModel = saveHand( bestMove )
+            initialHandModel = saveHand( initialHand )
+            deckHandModel = saveHand( deckHand )
+            besHandModel = saveHand( bestHand )
             moveModel = MoveModel.new( { initialHand: initialHandModel, deckHand: deckHandModel, bestHand: besHandModel } )
             moveModel.save!()
         end
@@ -11,11 +16,11 @@ class MoveDao
 
     private
 
-    def saveHand( cardsArray )
-        validate_saveHand( cardsArray )
+    def saveHand( hand )
+        validate_saveHand( hand )
         newHandModel = HandModel.new
         handCardModelsArray = []
-        for card in cardsArray
+        for card in hand.cards
             handCardModelsArray << createHandCardModel( card, newHandModel )
         end
         newHandModel.save!()
@@ -25,9 +30,8 @@ class MoveDao
         return newHandModel
     end
 
-    def validate_saveHand( cardsArray )
-        ValidateUtil.raiseIfIsNotAnArrayWithOnly( cardsArray, Card )
-        ValidateUtil.raiseIfArrayHasADifferentSize( cardsArray, Hand::NUMBER_OF_CARDS )
+    def validate_saveHand( hand )
+        ValidateUtil.raiseIfValueIsNotA( hand, Hand )
     end
 
     def createHandCardModel( card, newHandModel )
