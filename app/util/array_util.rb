@@ -1,7 +1,11 @@
 class ArrayUtil
     def self.duplicateValues( array )
-        duplicates = array.select{|element| array.count(element) > 1 }
-        return duplicates
+        return array.select{|element| array.count(element) > 1 }
+    end
+
+    def self.allValuesAreUnique?( array )
+        duplicates = ArrayUtil.duplicateValues( array )
+        return duplicates.empty?
     end
 
     def self.changeValue( array, before, after )

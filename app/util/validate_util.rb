@@ -24,5 +24,12 @@ class ValidateUtil
         end
     end
 
+    def self.raiseIfNotAllValuesInArrayAreUnique( array, exceptionClass= ArgumentError )
+        duplicates = ArrayUtil.duplicateValues( array )
+        if duplicates.size > 0            
+            message = "It's was epected an array with only unique values, but was fount duplicates: #{duplicates}"
+            raise exceptionClass.new( message )
+        end
+    end
     
 end
