@@ -7,9 +7,6 @@ ruby '3.0.0'
 gem 'rails', '~> 6.1.2', '>= 6.1.2.1'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3', '~> 1.4'
-# Dry - Framework to dependency injection
-gem 'dry-container', '~> 0.7.2'
-gem 'dry-auto_inject', '~> 0.7.0'
 # Use Puma as the app server
 gem 'puma', '~> 5.0'
 # Use SCSS for stylesheets
