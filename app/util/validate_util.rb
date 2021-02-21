@@ -7,7 +7,7 @@ class ValidateUtil
     end
 
     def self.raiseIfIsNotAnArrayWithOnly( array, className, exceptionClass= ArgumentError )
-        allTypes = ValidateUtil.differentTypesInArray( array )
+        allTypes = ArrayUtil.differentTypesInArray( array )
         if allTypes.size > 1
             undesiredTypes = allTypes - [className]
             message = "It was expected an array with only #{className}, but it was also found #{undesiredTypes}"
@@ -15,10 +15,14 @@ class ValidateUtil
         end
     end
 
-    def self.differentTypesInArray( array )
-        self.raiseIfValueIsNotA( array, Array )
-        return [] if array.empty?       
-        classesInArray = array.map { |item| item.class }
-        return classesInArray.uniq()
+    def self.raiseIfArrayHasADifferentSize( array, size, exceptionClass= ArgumentError )
+        ValidateUtil.raiseIfValueIsNotA( array, Array )
+        ValidateUtil.raiseIfValueIsNotA( size, Integer )
+        if array.size != size
+            message = "It was expected an array with exactly #{size} values, but it was also found #{array.size}"
+            raise exceptionClass.new( message )
+        end
     end
+
+    
 end

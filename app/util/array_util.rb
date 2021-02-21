@@ -42,4 +42,11 @@ class ArrayUtil
         end
         return true
     end
+
+    def self.differentTypesInArray( array )
+        ValidateUtil.raiseIfValueIsNotA( array, Array )
+        return [] if array.empty?       
+        classesInArray = array.map { |item| item.class }
+        return classesInArray.uniq()
+    end
 end
