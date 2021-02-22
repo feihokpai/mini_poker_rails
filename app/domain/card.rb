@@ -75,6 +75,16 @@ class Card < DomainObject
         return codeCardsString
     end
 
+    def self.convertCardCodesStringToCardsArray( cardCodesString )
+        ValidateUtil.raiseIfValueIsNotA(cardCodesString, String )
+        codeCardsArray = cardCodesString.split(" ")
+        cardsArray = []
+        for codeCard in codeCardsArray
+            cardsArray << Card.new( codeCard )            
+        end
+        return cardsArray
+    end
+
     def to_s()
         return "Card(number=#{number},suit=#{suit})"
     end

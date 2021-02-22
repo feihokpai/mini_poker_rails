@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_21_090446) do
+ActiveRecord::Schema.define(version: 2021_02_22_020313) do
 
   create_table "cards", force: :cascade do |t|
     t.integer "number"
@@ -25,6 +25,13 @@ ActiveRecord::Schema.define(version: 2021_02_21_090446) do
     t.integer "hand_id", null: false
   end
 
+  create_table "combinations", force: :cascade do |t|
+    t.string "name"
+    t.string "code"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "hands", force: :cascade do |t|
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
@@ -36,7 +43,9 @@ ActiveRecord::Schema.define(version: 2021_02_21_090446) do
     t.integer "initial_hand_id"
     t.integer "deck_hand_id"
     t.integer "best_hand_id"
+    t.integer "combination_id", null: false
     t.index ["best_hand_id"], name: "index_moves_on_best_hand_id"
+    t.index ["combination_id"], name: "index_moves_on_combination_id"
     t.index ["deck_hand_id"], name: "index_moves_on_deck_hand_id"
     t.index ["initial_hand_id"], name: "index_moves_on_initial_hand_id"
   end
@@ -49,4 +58,5 @@ ActiveRecord::Schema.define(version: 2021_02_21_090446) do
   end
 
   add_foreign_key "cards", "suits"
+  add_foreign_key "moves", "combinations"
 end

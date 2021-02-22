@@ -6,6 +6,13 @@ class ValidateUtil
         end
     end
 
+    def self.raiseIfValueIsNotABoolean( value, exceptionClass= ArgumentError )
+        if not( [true, false].include?( value ) )
+            message = "It was expected a Boolean type, but received a #{value.class}"
+            raise exceptionClass.new( message )
+        end
+    end
+
     def self.raiseIfIsNotAnArrayWithOnly( array, className, exceptionClass= ArgumentError )
         allTypes = ArrayUtil.differentTypesInArray( array )
         if allTypes.size > 1
@@ -24,5 +31,12 @@ class ValidateUtil
         end
     end
 
+    def self.raiseIfNotAllValuesInArrayAreUnique( array, exceptionClass= ArgumentError )
+        duplicates = ArrayUtil.duplicateValues( array )
+        if duplicates.size > 0            
+            message = "It's was epected an array with only unique values, but was found duplicates: #{duplicates}"
+            raise exceptionClass.new( message )
+        end
+    end
     
 end

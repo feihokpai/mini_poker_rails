@@ -1,75 +1,39 @@
 class CardCombination
 
-    attr_reader :pontuation, :name
+    attr_reader :pontuation, :name, :code
 
-    def initialize( pontuation, name )
+    def initialize( pontuation, name, code )
         @pontuation = pontuation
         @name = name
+        @code = code
     end
 
-    HIGHEST_CARD = CardCombination.new( 1, "Highest-card" )
-    ONE_PAIR = CardCombination.new( 2, "One Pair" )
-    TWO_PAIRS = CardCombination.new( 3, "Two pairs" )
-    THREE_OF_A_KIND = CardCombination.new( 4, "Three of a kind" )
-    STRAIGHT = CardCombination.new( 5, "Straight" )
-    FLUSH = CardCombination.new( 6, "Flush" )
-    FULL_HOUSE = CardCombination.new( 7, "Full House" )
-    FOUR_OF_A_KIND = CardCombination.new( 8, "Four of a kind" )
-    STRAIGHT_FLUSH = CardCombination.new( 9, "Straight Flush" )
-    ROYAL_STRAIGHT_FLUSH = CardCombination.new( 10, "Royal Straight Flush" )
+    HIGHEST_CARD = CardCombination.new( 1, "Highest-card", "HC" )
+    ONE_PAIR = CardCombination.new( 2, "One Pair", "OP" )
+    TWO_PAIRS = CardCombination.new( 3, "Two pairs", "TP" )
+    THREE_OF_A_KIND = CardCombination.new( 4, "Three of a kind", "TK" )
+    STRAIGHT = CardCombination.new( 5, "Straight", "ST" )
+    FLUSH = CardCombination.new( 6, "Flush", "FL" )
+    FULL_HOUSE = CardCombination.new( 7, "Full House", "FU" )
+    FOUR_OF_A_KIND = CardCombination.new( 8, "Four of a kind", "FK" )
+    STRAIGHT_FLUSH = CardCombination.new( 9, "Straight Flush", "SF" )
+    ROYAL_STRAIGHT_FLUSH = CardCombination.new( 10, "Royal Straight Flush", "RS" )
 
     def to_s
         return "name: #{@name}, pontuation: #{@pontuation}"
     end
 
-    def self.combination( arrayOfCards )
-        numericalCombinations = self.getNumericalDuplicatesInHand( arrayOfCards )        
+    def self.defineCombination( hand )
+        numericalCombinations = hand.numericalDuplicates()
         if numericalCombinations.empty?
-            return self.moveWithZeroNumericalCombinations( arrayOfCards )
+            return self.moveWithZeroNumericalCombinations( hand )
         end
-        return self.moveWithNumericalCombinations( arrayOfCards, numericalCombinations )
-    end
-
-    def self.bestMoveUsingHandAndDeck( handCards, deckCards )
-        self.validateHandOrSuitCards( deckCards )
-        bestResults = []
-        bestResults[0] = self.bestMoveTradingNCards( handCards, deckCards, 0 )
-        bestResults[1] = self.bestMoveTradingNCards( handCards, deckCards, 1 )
-        bestResults[2] = self.bestMoveTradingNCards( handCards, deckCards, 2 )
-        bestResults[3] = self.bestMoveTradingNCards( handCards, deckCards, 3 )
-        bestResults[4] = self.bestMoveTradingNCards( handCards, deckCards, 4 )
-        bestResults[5] = self.bestMoveTradingNCards( handCards, deckCards, 5 )
-        orderedMoves = bestResults.sort_by { |result| result[:combination].pontuation }
-        return orderedMoves.last
+        return self.moveWithNumericalCombinations( numericalCombinations )
     end
 
     private
 
-    def self.bestMoveTradingNCards( handCards, deckCards, numberOfCards )        
-        cardCombination = self.combination( handCards )  
-        bestResult = { :combination => cardCombination, :move => handCards, :hand => handCards, :deck => deckCards }
-        return bestResult if numberOfCards == 0
-
-        cardIndexes = [0,1,2,3,4]
-        possibleCombinationsArray = cardIndexes.combination( numberOfCards ).to_a()
-
-        for combinationArray in possibleCombinationsArray
-            copyOfHandCards = handCards.clone()
-            nextDeckCardsIndex = 0
-            for index in combinationArray
-                copyOfHandCards[index] = deckCards[ nextDeckCardsIndex ]                
-                nextDeckCardsIndex += 1
-            end
-            newCombination = self.combination( copyOfHandCards )
-            if newCombination.pontuation > bestResult[:combination].pontuation
-                bestResult[:combination] = newCombination
-                bestResult[:move] = copyOfHandCards
-            end
-        end
-        return bestResult
-    end
-
-    def self.moveWithNumericalCombinations( arrayOfCards, numericalCombinations )   
+    def self.moveWithNumericalCombinations( numericalCombinations )   
         return ONE_PAIR if numericalCombinations.size == 2
         return THREE_OF_A_KIND if numericalCombinations.size == 3
         uniqueValuesArray = numericalCombinations.uniq
@@ -80,22 +44,22 @@ class CardCombination
         return FULL_HOUSE        
     end
 
-    def self.moveWithZeroNumericalCombinations( arrayOfCards )
-        suitCombinations = self.getSuitDuplicatesInHand( arrayOfCards )        
+    def self.moveWithZeroNumericalCombinations( hand )
+        suitCombinations = hand.suitDuplicates()
         uniqueSuitValues = suitCombinations.uniq()
         allSuitsEquals = suitCombinations.size == 5 && uniqueSuitValues.size == 1
         if allSuitsEquals
-            return self.moveWithFiveSuitCombination( arrayOfCards )
+            return self.moveWithFiveSuitCombination( hand )
         end
-        isANumericalSequence = self.cardsInNumericalSequence?( arrayOfCards )
+        isANumericalSequence = hand.cardsInNumericalSequence?()
         return STRAIGHT if isANumericalSequence
         return HIGHEST_CARD
     end
 
-    def self.moveWithFiveSuitCombination( arrayOfCards )
-        isANumericalSequence = self.cardsInNumericalSequence?( arrayOfCards )
+    def self.moveWithFiveSuitCombination( hand )
+        isANumericalSequence = hand.cardsInNumericalSequence?()
         return FLUSH if not isANumericalSequence
-        orderedNumbers = self.numbersOrderedAsIntegersConsideringTheKing( arrayOfCards )
+        orderedNumbers = hand.numbersOrderedAsIntegersConsideringTheKing()
         isFirstCardNumber10 = orderedNumbers.first == Card::TEN_VALUE
         isLastCardNumber1 = orderedNumbers.last == Card::ACE_PLUS_KING_VALUE
         if (isFirstCardNumber10 && isLastCardNumber1)
@@ -104,73 +68,4 @@ class CardCombination
         return STRAIGHT_FLUSH
     end
 
-    def self.cardsInNumericalSequence?( arrayOfCards )
-        orderedNumbers = self.numbersOrderedAsIntegersConsideringTheKing( arrayOfCards )
-        return ArrayUtil.isAnArrayWithAllValuesAsIntegersInSequence?( orderedNumbers ) 
-    end
-
-    def self.numbersOrdered( arrayOfCards )
-        numericalValues = self.numericalValues( arrayOfCards )
-        return numericalValues.sort
-    end
-
-    def self.numbersOrderedAsIntegersConsideringTheKing( arrayOfCards )
-        orderedNumbers = self.numbersOrderedAsIntegers( arrayOfCards )
-        includesKing = orderedNumbers.include?( Card::KING_VALUE )       
-        if not(includesKing)
-            return orderedNumbers
-        end
-        copyOfOrderedNumbers = orderedNumbers.clone()
-        copyOfOrderedNumbers = ArrayUtil.changeValue( copyOfOrderedNumbers, Card::ACE_VALUE, Card::ACE_PLUS_KING_VALUE )
-        reorderedNumbers = copyOfOrderedNumbers.sort
-        return reorderedNumbers
-    end
-
-    def self.numbersOrderedAsIntegers( arrayOfCards )
-        numericalValues = self.numericalValuesAsIntegers( arrayOfCards )
-        return numericalValues.sort
-    end
-
-    def self.getNumericalDuplicatesInHand( arrayOfCards )
-        validateHandOrSuitCards( arrayOfCards )
-        numericalValues = self.numericalValues( arrayOfCards )
-        numericalCombinations = ArrayUtil.duplicateValues( numericalValues )        
-        return numericalCombinations
-    end
-
-    def self.numericalValues( arrayOfCards )
-        return arrayOfCards.map { |card| card.number  }
-    end
-
-    def self.numericalValuesAsIntegers( arrayOfCards )
-        return arrayOfCards.map { |card| card.numberAsInteger  }
-    end
-
-    def self.getSuitDuplicatesInHand( arrayOfCards )
-        self.validateHandOrSuitCards( arrayOfCards )
-        suitValues = arrayOfCards.map { |card| card.suit  }
-        suitCombinations = ArrayUtil.duplicateValues( suitValues )        
-        return suitCombinations
-    end
-
-    def self.validateHandOrSuitCards( arrayOfCards )
-        self.validateArrayOfCards( arrayOfCards )
-        numberOfCards = arrayOfCards.size
-        raise "It was expected 5 cards. received: #{numberOfCards}" if numberOfCards != 5
-        self.validateIfAllCardsAreUnique( arrayOfCards )
-    end
-
-    def self.validateIfAllCardsAreUnique( arrayOfCards )
-        stringValuesArray = arrayOfCards.map { |card| card.stringDefinition }
-        uniqueStringValues = stringValuesArray.uniq()
-        if uniqueStringValues.size < 5
-            raise ArgumentError.new( "It's not allowed repeated cards in hand or deck" )
-        end
-    end
-
-    def self.validateArrayOfCards( arrayOfCards )
-        invalidTypeMessage = "It was expected an array of Cards. Received one #{arrayOfCards.class} "
-        isNotOneArrayOfCards = not( Card.isArrayOfCards( arrayOfCards ) )
-        raise invalidTypeMessage if isNotOneArrayOfCards
-    end
 end
