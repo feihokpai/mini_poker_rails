@@ -20,7 +20,10 @@ class MoveDao < DaoInterface
         initialHandModel = @handDao.save( moveDomain.initialHand, @transactionActived )
         deckHandModel = @handDao.save( moveDomain.deckHand, @transactionActived )
         besHandModel = @handDao.save( moveDomain.bestHand, @transactionActived )
-        moveModel = MoveModel.new( { initialHand: initialHandModel, deckHand: deckHandModel, bestHand: besHandModel } )
+        combination = moveDomain.bestCombination
+        combinationModel = CombinationModel.where( code: combination.code ).first
+        params = { initialHand: initialHandModel, deckHand: deckHandModel, bestHand: besHandModel, combination: combinationModel }
+        moveModel = MoveModel.new( params )
         return moveModel.save!()
     end
 
