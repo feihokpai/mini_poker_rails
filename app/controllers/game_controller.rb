@@ -117,14 +117,14 @@ class GameController < ApplicationController
         allCodeCards = lineContent.split(" ")        
         @gameService.validateLineOfCardCodes( allCodeCards )   
         @cardsArray = @gameService.convertOnCardsArray( allCodeCards )
-        bestResult = @gameService.analyzeBestMove( @cardsArray )
-        bestMoveDescription = bestResult.nil? ? "Failed" : bestResult[:combination].name
+        move = @gameService.analyzeBestMove( @cardsArray )
+        bestMoveDescription = move.nil? ? "Failed" : move.bestCombination.name
         handCards = allCodeCards[0..4]
         stringHandCards = handCards.join(" ")
         first5DeckCards = allCodeCards[5..9]        
         stringFirst5DeckCards = first5DeckCards.join(" ")
         textToUser = "Hand: #{stringHandCards} Deck: #{stringFirst5DeckCards} - Best combination: #{bestMoveDescription}"
-        bestMoveString = Card.convertCardsArrayToString( bestResult[:move] )
+        bestMoveString = Card.convertCardsArrayToString( move.bestHand.cards )
         textToUser += " - (#{bestMoveString})"
         return textToUser
     end

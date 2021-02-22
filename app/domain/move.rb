@@ -9,23 +9,23 @@ class Move < DomainObject
         @bestCombination = bestCombination
     end
 
-    def besthand=( value )
+    def bestHand=( value )
         validate_setBestHand( value )
         @bestHand = value 
     end
 
     def calculateBestMove( )
         bestResults = []
-        bestResults[0] = self.bestMoveTradingNCards( handCards, deckCards, 0 )
-        bestResults[1] = self.bestMoveTradingNCards( handCards, deckCards, 1 )
-        bestResults[2] = self.bestMoveTradingNCards( handCards, deckCards, 2 )
-        bestResults[3] = self.bestMoveTradingNCards( handCards, deckCards, 3 )
-        bestResults[4] = self.bestMoveTradingNCards( handCards, deckCards, 4 )
-        bestResults[5] = self.bestMoveTradingNCards( handCards, deckCards, 5 )
+        bestResults[0] = bestMoveTradingNCards( 0 )
+        bestResults[1] = bestMoveTradingNCards( 1 )
+        bestResults[2] = bestMoveTradingNCards( 2 )
+        bestResults[3] = bestMoveTradingNCards( 3 )
+        bestResults[4] = bestMoveTradingNCards( 4 )
+        bestResults[5] = bestMoveTradingNCards( 5 )
         orderedMoves = bestResults.sort_by { |result| result[:combination].pontuation }
         bestMove = orderedMoves.last
-        self.bestHand=( bestMove.move )
-        @bestCombination = bestMove.combination
+        self.bestHand=( bestMove[:move] )
+        @bestCombination = bestMove[:combination]
     end
 
     def bestMoveTradingNCards( numberOfCards )        
@@ -37,7 +37,7 @@ class Move < DomainObject
         possibleCombinationsArray = cardIndexes.combination( numberOfCards ).to_a()
 
         for indexesToTrade in possibleCombinationsArray
-            newHand = self.tradeNCardsWithDeck( indexesToTrade )
+            newHand = tradeNCardsWithDeck( indexesToTrade )
             newCombination = CardCombination.defineCombination( newHand )
             if newCombination.pontuation > bestResult[:combination].pontuation
                 bestResult[:combination] = newCombination
@@ -47,7 +47,7 @@ class Move < DomainObject
         return bestResult
     end
 
-    def self.tradeNCardsWithDeck( indexesToTrade )
+    def tradeNCardsWithDeck( indexesToTrade )
         copyOfInitialHandCardsArray = @initialHand.cards.clone()
         nextDeckCardsIndex = 0
         for index in indexesToTrade
@@ -64,7 +64,7 @@ class Move < DomainObject
         ValidateUtil.raiseIfValueIsNotA( deckHand, Hand )
         allCards = initialHand.cards + deckHand.cards
         ValidateUtil.raiseIfNotAllValuesInArrayAreUnique( allCards )
-        validate_setBestHand( value )
+        validate_setBestHand( bestHand )
         if bestCombination.present?
             ValidateUtil.raiseIfValueIsNotA( bestCombination, CardCombination )
         end

@@ -11,7 +11,7 @@ class GameService < GenericService
 
     def analyzeBestMove( arrayOfCards )
         validate_analyzeBestMove( arrayOfCards )
-        initalHand = Hand.new( arrayOfCards[0..4] )     
+        initialHand = Hand.new( arrayOfCards[0..4] )     
         deckHand = Hand.new( arrayOfCards[5..9]   )
         move = Move.new( initialHand, deckHand )
         move.calculateBestMove()

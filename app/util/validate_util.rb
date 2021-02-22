@@ -7,7 +7,7 @@ class ValidateUtil
     end
 
     def self.raiseIfValueIsNotABoolean( value, exceptionClass= ArgumentError )
-        if not( [true, false].include?( x ) )
+        if not( [true, false].include?( value ) )
             message = "It was expected a Boolean type, but received a #{value.class}"
             raise exceptionClass.new( message )
         end
