@@ -1,22 +1,23 @@
 class CardCombination
 
-    attr_reader :pontuation, :name
+    attr_reader :pontuation, :name, :code
 
-    def initialize( pontuation, name )
+    def initialize( pontuation, name, code )
         @pontuation = pontuation
         @name = name
+        @code = code
     end
 
-    HIGHEST_CARD = CardCombination.new( 1, "Highest-card" )
-    ONE_PAIR = CardCombination.new( 2, "One Pair" )
-    TWO_PAIRS = CardCombination.new( 3, "Two pairs" )
-    THREE_OF_A_KIND = CardCombination.new( 4, "Three of a kind" )
-    STRAIGHT = CardCombination.new( 5, "Straight" )
-    FLUSH = CardCombination.new( 6, "Flush" )
-    FULL_HOUSE = CardCombination.new( 7, "Full House" )
-    FOUR_OF_A_KIND = CardCombination.new( 8, "Four of a kind" )
-    STRAIGHT_FLUSH = CardCombination.new( 9, "Straight Flush" )
-    ROYAL_STRAIGHT_FLUSH = CardCombination.new( 10, "Royal Straight Flush" )
+    HIGHEST_CARD = CardCombination.new( 1, "Highest-card", "HC" )
+    ONE_PAIR = CardCombination.new( 2, "One Pair", "OP" )
+    TWO_PAIRS = CardCombination.new( 3, "Two pairs", "TP" )
+    THREE_OF_A_KIND = CardCombination.new( 4, "Three of a kind", "TK" )
+    STRAIGHT = CardCombination.new( 5, "Straight", "ST" )
+    FLUSH = CardCombination.new( 6, "Flush", "FL" )
+    FULL_HOUSE = CardCombination.new( 7, "Full House", "FU" )
+    FOUR_OF_A_KIND = CardCombination.new( 8, "Four of a kind", "FK" )
+    STRAIGHT_FLUSH = CardCombination.new( 9, "Straight Flush", "SF" )
+    ROYAL_STRAIGHT_FLUSH = CardCombination.new( 10, "Royal Straight Flush", "RS" )
 
     def to_s
         return "name: #{@name}, pontuation: #{@pontuation}"
