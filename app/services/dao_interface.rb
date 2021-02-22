@@ -1,5 +1,8 @@
 class DaoInterface
-    def save( domainObject )
+
+    attr_reader :transactionActived
+
+    def save( domainObject, transactionActived=false )
         raiseNotImpplemented()
     end
 

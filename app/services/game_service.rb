@@ -3,13 +3,20 @@ require_relative "invalid_card_code_line_exception.rb"
 require_relative "../daos/move_dao.rb"
 
 class GameService < GenericService
+
+    def initialize( moveDao = MoveDao.new )
+        ValidateUtil.raiseIfValueIsNotA( moveDao, DaoInterface )
+        @moveDao = moveDao
+    end
+
     def analyzeBestMove( arrayOfCards )
         validate_analyzeBestMove( arrayOfCards )
         initalHand = Hand.new( arrayOfCards[0..4] )     
         deckHand = Hand.new( arrayOfCards[5..9]   )
-        bestResult = CardCombination.bestMoveUsingInitialHandAndDeck( initalHand, deckHand )
-        saveBestResult( bestResult )
-        return bestResult
+        move = Move.new( initialHand, deckHand )
+        move.calculateBestMove()
+        @moveDao.save( move )
+        return move
     end
 
     def validateLineOfCardCodes( cardCodesArray )        
@@ -50,18 +57,6 @@ class GameService < GenericService
     end
 
     private 
-
-    def saveBestResult( bestResult )
-        validate_saveBestResult( bestResult )
-        dao = MoveDao.new
-        dao.saveBestResult( bestResult[:hand], bestResult[:deck], bestResult[:move] )
-    end
-
-    def validate_saveBestResult( bestResult )
-        ValidateUtil.raiseIfValueIsNotA( bestResult, Hash )
-        ValidateUtil.raiseIfValueIsNotA( bestResult[:combination], CardCombination )
-        ValidateUtil.raiseIfIsNotAnArrayWithOnly( bestResult[:move], Card )
-    end
 
     def detachItemInArray( array, value )
         positionOfItem = array.find_index( value )
