@@ -1,11 +1,7 @@
 require_relative "../../app/domain/domain_object.rb"
 require_relative "../../app/domain/card.rb"
 require_relative "../../app/domain/card_combination.rb"
-require_relative "../../app/services/dao_interface.rb"
-require_relative "../../app/services/game_service.rb"
 
-
-gameService = GameService.new
 
 
 def verify( actual, expected, handTested="" )
@@ -56,9 +52,9 @@ describe CardCombination do
         cardsSequences << 'TS JS QS KS AS'
         cardsSequences << 'TC JC QC KC AC'
         cardsSequences << 'TH JH QH KH AH'
-        for hand in cardsSequences
-            arrayOfCards = gameService.convertCardCodesStringOnCardsArray( hand )
-            bestMove = CardCombination.defineCombination( Hand.new(arrayOfCards) )
+        for codesArray in cardsSequences
+            hand = Hand.create( codesArray )
+            bestMove = CardCombination.defineCombination( hand )
             verify( bestMove, CardCombination::ROYAL_STRAIGHT_FLUSH, hand )
         end
     end
@@ -100,9 +96,9 @@ describe CardCombination do
         cardsSequences << 'JD JH JS JC 2D'
         cardsSequences << 'QD QH QS QC 2D'
         cardsSequences << 'KD KH KS KC 2D'
-        for hand in cardsSequences
-            arrayOfCards = gameService.convertCardCodesStringOnCardsArray( hand )
-            bestMove = CardCombination.defineCombination( Hand.new(arrayOfCards) )
+        for codesArray in cardsSequences
+            hand = Hand.create( codesArray )
+            bestMove = CardCombination.defineCombination( hand )
             verify( bestMove, CardCombination::FOUR_OF_A_KIND, hand )
         end
     end
@@ -116,9 +112,9 @@ describe CardCombination do
         cardsSequences << 'JD JH JS QC QD'
         cardsSequences << 'QD QH QS KC KD'
         cardsSequences << 'KD KH KS AC AD'
-        for hand in cardsSequences
-            arrayOfCards = gameService.convertCardCodesStringOnCardsArray( hand )
-            bestMove = CardCombination.defineCombination( Hand.new(arrayOfCards) )
+        for codesArray in cardsSequences
+            hand = Hand.create( codesArray )
+            bestMove = CardCombination.defineCombination( hand )
             verify( bestMove, CardCombination::FULL_HOUSE, hand )
         end
     end
@@ -132,9 +128,9 @@ describe CardCombination do
         cardsSequences << '6D 7H 8S 9C TD'
         cardsSequences << 'TD JH QS KC AD'        
         
-        for hand in cardsSequences
-            arrayOfCards = gameService.convertCardCodesStringOnCardsArray( hand )
-            bestMove = CardCombination.defineCombination( Hand.new(arrayOfCards) )
+        for codesArray in cardsSequences
+            hand = Hand.create( codesArray )
+            bestMove = CardCombination.defineCombination( hand )
             verify( bestMove, CardCombination::STRAIGHT, hand )
         end
     end
@@ -148,9 +144,9 @@ describe CardCombination do
         cardsSequences << 'JD JH JS AC 2D'
         cardsSequences << 'QD QH QS KC 2D'
         cardsSequences << 'KD KH KS AC 2D'
-        for hand in cardsSequences
-            arrayOfCards = gameService.convertCardCodesStringOnCardsArray( hand )
-            bestMove = CardCombination.defineCombination( Hand.new(arrayOfCards) )
+        for codesArray in cardsSequences
+            hand = Hand.create( codesArray )
+            bestMove = CardCombination.defineCombination( hand )
             verify( bestMove, CardCombination::THREE_OF_A_KIND, hand )
         end
     end
@@ -165,9 +161,9 @@ describe CardCombination do
         cardsSequences << 'JD JH AS AC 2D'
         cardsSequences << 'QD QH 2S KC 2D'
         cardsSequences << 'KD KH AS AC 2D'
-        for hand in cardsSequences
-            arrayOfCards = gameService.convertCardCodesStringOnCardsArray( hand )
-            bestMove = CardCombination.defineCombination( Hand.new(arrayOfCards) )
+        for codesArray in cardsSequences
+            hand = Hand.create( codesArray )
+            bestMove = CardCombination.defineCombination( hand )
             verify( bestMove, CardCombination::TWO_PAIRS, hand )
         end
     end
@@ -181,9 +177,9 @@ describe CardCombination do
         cardsSequences << 'JD JH KS AC 2D'
         cardsSequences << 'QD QH AS KC 2D'
         cardsSequences << 'KD KH 3S AC 2D'
-        for hand in cardsSequences
-            arrayOfCards = gameService.convertCardCodesStringOnCardsArray( hand )
-            bestMove = CardCombination.defineCombination( Hand.new(arrayOfCards) )
+        for codesArray in cardsSequences
+            hand = Hand.create( codesArray )
+            bestMove = CardCombination.defineCombination( hand )
             verify( bestMove, CardCombination::ONE_PAIR, hand )
         end
     end
@@ -200,9 +196,9 @@ describe CardCombination do
         cardsSequences << 'JD QH KS AC 2D'
         cardsSequences << 'QH KS AC 2D 3D'
         cardsSequences << 'KS AC 2D 3D 4S'
-        for hand in cardsSequences
-            arrayOfCards = gameService.convertCardCodesStringOnCardsArray( hand )
-            bestMove = CardCombination.defineCombination( Hand.new(arrayOfCards) )
+        for codesArray in cardsSequences
+            hand = Hand.create( codesArray )
+            bestMove = CardCombination.defineCombination( hand )
             verify( bestMove, CardCombination::HIGHEST_CARD, hand )
         end
     end
