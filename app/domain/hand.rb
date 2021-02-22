@@ -8,6 +8,12 @@ class Hand < DomainObject
         @cards = cardsArray
     end
 
+    def self.create( cardCodesString )
+        validate_create( cardCodesString )
+        cardsArray = Card.convertCardCodesStringToCardsArray( cardCodesString )
+        return Hand.new( cardsArray )
+    end
+
     def numericalDuplicates( )
         numericalValues = self.numericalValues( )
         numericalCombinations = ArrayUtil.duplicateValues( numericalValues )        
@@ -51,6 +57,12 @@ class Hand < DomainObject
     end
 
     private
+
+    def self.validate_create( cardCodesString )
+        ValidateUtil.raiseIfValueIsNotA( cardCodesString, String )
+        allCodeCards = cardCodesString.split(" ")         
+        ValidateUtil.raiseIfArrayHasADifferentSize( allCodeCards, Hand::NUMBER_OF_CARDS )
+    end
 
     def validate_initialize( cardsArray )
         ValidateUtil.raiseIfIsNotAnArrayWithOnly( cardsArray, Card )
